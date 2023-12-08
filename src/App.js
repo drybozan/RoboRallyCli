@@ -1,23 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify'; // react-toastify'yi içe aktar
+import 'react-toastify/dist/ReactToastify.css'; // Stil dosyasını içe aktar
+import MainDashboard from './layouts/MainDashboard'
+import Login from './pages/Login'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <ToastContainer position="bottom-right" />
+      <Routes>
+        <Route exact path="/" element={<Login />} />
+        <Route exact path="/main" element={<MainDashboard />} />
+      </Routes>
+
     </div>
   );
 }
