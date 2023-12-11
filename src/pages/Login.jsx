@@ -45,7 +45,7 @@ export default function Login() {
             roboRallyServerService.login(username, password).then(result => {
 
 
-                if (result.data.success == true) {
+                if (result.data.success === true) {
 
                     localStorage.setItem("username", result.data.data.username);
                     console.log(localStorage.getItem("username"));
@@ -64,7 +64,7 @@ export default function Login() {
     }
 
     return (
-        <div style={{ width: screenWidth, height: screenHeight, backgroundImage: 'url(/loginBG3.jpg)', backgroundSize: 'cover', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ width: screenWidth, height: screenHeight, backgroundImage: 'url(/loginBG.jpg)', backgroundSize: 'cover', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
             <div style={{ padding: '20px', background: 'white', width: '30%', height: '50%', borderRadius: '5%', opacity: '0.7', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
