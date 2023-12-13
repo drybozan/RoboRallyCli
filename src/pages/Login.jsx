@@ -64,11 +64,11 @@ export default function Login() {
     }
 
     return (
-        <div style={{ width: screenWidth, height: screenHeight, backgroundImage: 'url(/loginBG.jpg)', backgroundSize: 'cover', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ width: screenWidth, height: screenHeight, backgroundImage: 'url(/loginBG2.jpg)', backgroundSize: 'cover', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
             <div style={{ padding: '20px', background: 'white', width: '30%', height: '50%', borderRadius: '5%', opacity: '0.7', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-                <img src="/sunnyTeknolojiLogo.png" alt="sunnyTeknolojiLogo" style={{ width: '50%', height: '10vh', marginTop: '10vh', background: 'white' }} />
+                <img src="/sunnyTeknolojiLogo.png" alt="sunnyTeknolojiLogo" style={{ width: '50%', height: '8vh', marginTop: '10vh', background: 'white' }} />
 
                 <Form style={{ width: '50%', marginTop: '5vh' }}>
                     <Form.Group>

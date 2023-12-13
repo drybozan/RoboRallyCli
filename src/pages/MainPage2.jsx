@@ -127,7 +127,7 @@ export default function MainDashboard() {
         if (index >= 10 && index <= 19) {
             sections.push(
 
-                <div style={{ width: "95%", height: "8%", borderRadius: "50px",  backgroundImage: `linear-gradient(to left, rgba(255, 255, 153, 0.3), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+                <div style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 255, 153, 0.3), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
 
                     {/* sıralama kısmı */}
                     <div style={{ flex: "0.3" }}>
@@ -137,13 +137,10 @@ export default function MainDashboard() {
 
                     </div>
 
-                    <div style={{ flex: "0.5" ,color: '#000', fontWeight: 'bold', fontSize: "30px" }}>
-                        KARS  </div>
-                    <div style={{ flex: "2", fontWeight: 'bold', fontSize: "30px" }}>
-                        
-                        KARS ORTAOKUL </div>
+                    <div style={{ flex: "0.5", color: '#000', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> KARS  </div>
+                    <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> KARS ORTAOKUL </div>
 
-                    <div style={{ flex: "1", color: '#000', fontWeight: 'bold', fontSize: "30px" }}>
+                    <div style={{ flex: "1", color: '#000', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
                         {formattedTime}
 
@@ -171,17 +168,17 @@ export default function MainDashboard() {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
 
                 <div onClick={() => logOutClick()} style={{ cursor: 'pointer' }}>
-                    <img src={`${process.env.PUBLIC_URL}/logout.png`} alt="logout" style={{ width: '7%', height: '7vh', position: 'fixed', top: '5.5%', right: '6%' }} />
+                    <img src={`${process.env.PUBLIC_URL}/logout.png`} alt="logout" style={{ width: '7%', height: '7vh', position: 'fixed', top: '4%', right: '6%' }} />
                 </div>
 
             </div>
 
 
-            <div style={{ width: "95%", height: "77%", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: "0.1%" }}>
+            <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: "0.1%" }}>
 
                 {/* tablo başlıkları  */}
-                <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)' }}>
-                    <div style={{ flex: "0.3" }}>SIRALAMA </div>
+                <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
+                    <div style={{ flex: "0.3" }}></div>
                     <div style={{ flex: "0.5" }}>ŞEHİR </div>
                     <div style={{ flex: "2" }}> YARIŞMACI </div>
                     <div style={{ flex: "1" }}> SÜRE </div>
@@ -196,7 +193,7 @@ export default function MainDashboard() {
 
             <div style={{ display: 'flex', justifyContent: 'center' }}>
 
-                <img src={`${process.env.PUBLIC_URL}/homeLogo2.png`} alt="sunnyTeknolojiLogo" style={{ width: '18%', height: '13vh', position: 'fixed', bottom: '0.1%', left: '37%' }} />
+                <img src={`${process.env.PUBLIC_URL}/homeLogo2.png`} alt="sunnyTeknolojiLogo" style={{ width: '18%', height: '13vh', position: 'fixed', bottom: '-1%', left: '37%' }} />
             </div>
 
             <div onClick={() => previousPageClick()} style={{ cursor: 'pointer' }}>

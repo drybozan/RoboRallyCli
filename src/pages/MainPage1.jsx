@@ -171,9 +171,9 @@ export default function MainDashboard() {
 
             </div>
 
-            <div style={{ flex: "0.5" , fontWeight: 'bold', fontSize: "30px",color:"white"}}> AĞRI   </div>
-            <div style={{ flex: "2" , fontWeight: 'bold', fontSize: "30px",color:"white"}}> A ORTAOKULU   </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "30px" }}>
+            <div style={{ flex: "0.5" , fontWeight: 'bold', fontSize: "35px",color:"white" , fontStyle: 'italic', fontFamily: 'New Times Roman'}}> AĞRI   </div>
+            <div style={{ flex: "2" , fontWeight: 'bold', fontSize: "35px",color:"white", fontStyle: 'italic', fontFamily: 'New Times Roman'}}> A ORTAOKULU   </div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman'}}>
 
               {formattedTime}
 
@@ -210,9 +210,9 @@ export default function MainDashboard() {
               )}
             </div>
 
-            <div style={{ flex: "0.5" , fontWeight: 'bold', fontSize: "30px",color:"white"}}>ARDAHAN </div>
-            <div style={{ flex: "2" , fontWeight: 'bold', fontSize: "30px",color:"white"}}> ARDAHAN LİSE  </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "30px" }}>
+            <div style={{ flex: "0.5" , fontWeight: 'bold', fontSize: "35px",color:"white", fontStyle: 'italic', fontFamily: 'New Times Roman'}}>ARDAHAN </div>
+            <div style={{ flex: "2" , fontWeight: 'bold', fontSize: "35px",color:"white", fontStyle: 'italic', fontFamily: 'New Times Roman'}}> ARDAHAN LİSE  </div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px" , fontStyle: 'italic', fontFamily: 'New Times Roman'}}>
 
               {formattedTime}
 
@@ -241,25 +241,25 @@ export default function MainDashboard() {
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
 
-        <img src={`${process.env.PUBLIC_URL}/homeLogo.png`} alt="sunnyTeknolojiLogo" style={{ width: '25%', height: '15vh', position: 'fixed', top: '2%', left: '3%' }} />
+        <img src={`${process.env.PUBLIC_URL}/homeLogo.png`} alt="sunnyTeknolojiLogo" style={{ width: '25%', height: '15vh', position: 'fixed', top: '1%', left: '3%' }} />
 
         <div onClick={handleShowAddOpen} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '15%', height: '8vh', position: 'fixed', top: '4.5%', right: '13%' }} />
+          <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '15%', height: '8vh', position: 'fixed', top: '3%', right: '13%' }} />
         </div>
 
 
         <div onClick={() => logOutClick()} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/logout.png`} alt="logout" style={{ width: '7%', height: '7vh', position: 'fixed', top: '5.5%', right: '6%' }} />
+          <img src={`${process.env.PUBLIC_URL}/logout.png`} alt="logout" style={{ width: '7%', height: '7vh', position: 'fixed', top: '4%', right: '6%' }} />
         </div>
 
       </div>
 
 
-      <div style={{ width: "95%", height: "77%", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: "3%" }}>
+      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: "3%" }}>
 
         {/* tablo başlıkları  */}
-        <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)' }}>
-          <div style={{ flex: "0.3" }}>SIRALAMA </div>
+        <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)',fontSize: "30px",fontFamily: 'New Times Roman' }}>
+          <div style={{ flex: "0.3"}}></div>
           <div style={{ flex: "0.5" }}>ŞEHİR </div>
           <div style={{ flex: "2" }}> YARIŞMACI </div>
           <div style={{ flex: "1" }}> SÜRE </div>
