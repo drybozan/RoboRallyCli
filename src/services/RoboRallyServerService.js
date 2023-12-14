@@ -19,6 +19,32 @@ export default class RoboRallyServerService {
         })
     }
 
+    add(city,name,duration,isStart) {
+
+        return axios({
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/add`,
+            data: {
+                "city": city,
+                "name": name,
+                "duration":duration,
+                "start":isStart
+
+            }
+        })
+    }
+
+    getAllCompetitorsByDuration() {
+
+        return axios({
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/getAllByDuration`,
+          
+        })
+    }
+
  
 
 }

@@ -3,15 +3,17 @@ import { useState, useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import RoboRallyServerService from '../services/RoboRallyServerService';
 
 
-
-export default function MainDashboard() {
+export default function MainPage1() {
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth); //tarayıcı penceresinin mevcut genişliği  
   const [screenHeight, setScreenHeight] = useState(window.innerHeight); // tarayıcı penceresinin mevcut yüksekliği
 
   const navigate = useNavigate();
+  const roboRallyServerService = new RoboRallyServerService();
+
 
   //yarismacı ekleme modalı için
   const [showAdd, setShowAdd] = useState(false);
@@ -23,10 +25,18 @@ export default function MainDashboard() {
   const handleShowUpdateClose = () => setShowUpdate(false);
   const handleShowUpdateOpen = () => setShowUpdate(true);
 
+  // timer icin
   const [time, setTime] = useState({ minutes: 0, seconds: 0, milliseconds: 0 });
   const [isRunning, setIsRunning] = useState(false);
 
-  const numOfSections = 20; // Kaç parça olacağını belirtin
+
+  const [city, setCity] = useState("");
+  const [name, setName] = useState("");
+  const [isStart, setIsStart] = useState(false);
+
+  const [competitors, setCompetitors] = useState([]);
+
+  const formattedTime = `${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}.${String(time.milliseconds).padStart(3, '0')}`;
 
 
 
@@ -41,19 +51,36 @@ export default function MainDashboard() {
     // Event listener to handle resize
     // tarayıcı penceresinin boyutu değiştiğinde çağrılacak olan updateDimensions fonksiyonu bir event listener'a eklenir.
     window.addEventListener('resize', updateDimensions);
-    // navigate('/main/page1');
+
     // Clean up the event listener on component unmount
     return () => window.removeEventListener('resize', updateDimensions);
 
   }, []);
 
+  useEffect(() => {
+
+    roboRallyServerService.getAllCompetitorsByDuration().then(result => {
+
+      // console.log("getAllCompetitorsByDuration")
+      // console.log(result)
+
+      if (result.data.success === true) {
+        setCompetitors(result.data.data)
+      } else {
+        toast.error(result.data.message);
+
+      }
+    }).catch(e => {
+      console.error(e);
+    })
+
+
+  });
 
 
   async function nextPageClick() {
 
-    const dataToSend = { key: numOfSections }; // Göndermek istediğiniz veri
-
-    navigate('/main/page2', { state: dataToSend });
+    navigate('/main/page2');
   }
 
   async function logOutClick() {
@@ -81,15 +108,46 @@ export default function MainDashboard() {
 
   async function addCompetitorClick() {
 
-    //modal kapat
-    handleShowAddClose()
+    console.log("city")
+    console.log(city)
 
+    console.log("name")
+    console.log(name)
+
+    console.log("formattedTime")
+    console.log(formattedTime)
+
+    if(city === ""){
+
+      toast.warning("Lütfen şehir bilgisini giriniz.");
+
+    }else if(name === ""){
+
+      toast.warning("Lütfen yarışmacı ismini giriniz.");
+
+    }else{
+      roboRallyServerService.add(city, name, formattedTime, isStart).then(result => {
+
+        if (result.data.success === true) {
+          toast.success(result.data.message);
+        } else {
+          toast.error(result.data.message);
+  
+        }
+      }).catch(e => {
+        console.error(e);
+      }).finally(() => {
+        // modal kapat
+        handleShowAddClose();
+        setCity("")
+        setName("")
+        setIsStart(false)
+      });
+
+    } 
   }
 
   useEffect(() => {
-
-    console.log("main page 1 : ");
-    console.log(localStorage.getItem("running"));
 
     let intervalId;
 
@@ -133,10 +191,11 @@ export default function MainDashboard() {
     setIsRunning(!isRunning);
   };
 
-  const formattedTime = `${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}.${String(time.milliseconds).padStart(3, '0')}`;
 
 
   const sections = [];
+
+  const numOfSections = competitors.length; // Kaç parça olacağını belirt
 
   for (let index = 0; index < numOfSections; index++) {
     if (index >= 0 && index <= 9) {
@@ -161,13 +220,9 @@ export default function MainDashboard() {
 
             </div>
 
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> AĞRI   </div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> AĞRI ORTAOKULU   </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-
-              {formattedTime}
-
-            </div>
+            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}</div>
+            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration}</div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
@@ -205,13 +260,9 @@ export default function MainDashboard() {
 
             </div>
 
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> IĞDIR   </div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> IĞDIR ORTAOKULU   </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-
-              {formattedTime}
-
-            </div>
+            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()} </div>
+            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration.toUpperCase()}</div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
@@ -226,7 +277,7 @@ export default function MainDashboard() {
 
         );
 
-      } else if ( index === 2) {
+      } else if (index === 2) {
 
         sections.push(
 
@@ -238,7 +289,7 @@ export default function MainDashboard() {
 
               {/* sıralamanın yazıldığı yuvarlaklar*/}
               <div style={{ width: "60%", height: "100%", borderRadius: "50%" }}>
-          
+
                 {index === 2 && (
 
                   <img src={`${process.env.PUBLIC_URL}/3.png`} alt="Icon bronz" width="100" height="100" style={{ alignSelf: 'flex-start', marginLeft: '-20px' }} />
@@ -249,13 +300,9 @@ export default function MainDashboard() {
 
             </div>
 
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> ARDAHAN   </div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> ARDAHAN ORTAOKULU   </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-
-              {formattedTime}
-
-            </div>
+            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
+            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}   </div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>  {competitors[index].duration}  </div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
@@ -288,13 +335,9 @@ export default function MainDashboard() {
               )}
             </div>
 
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>ARDAHAN </div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> ARDAHAN LİSE  </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-
-              {formattedTime}
-
-            </div>
+            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitors[index].city.toUpperCase()}</div>
+            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}</div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitors[index].duration}</div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
@@ -342,7 +385,7 @@ export default function MainDashboard() {
           <div style={{ flex: "2" }}> YARIŞMACI </div>
           <div style={{ flex: "1" }}> SÜRE </div>
           <div style={{ flex: "0.5" }} onClick={() => handleStartStopClick()}>
-            {/* <img src={`${process.env.PUBLIC_URL}/start.png`} alt="start" style={{ width: '5vw', height: '6vh' }} /> */}
+            <img src={`${process.env.PUBLIC_URL}/start.png`} alt="start" style={{ width: '5vw', height: '6vh' }} />
           </div>
         </div>
 
@@ -368,12 +411,12 @@ export default function MainDashboard() {
             <Form>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>ŞEHİR</Form.Label>
-                <Form.Select aria-label="Default select example">
+                <Form.Select aria-label="Default select example" onChange={(e) => setCity(e.target.value)} value={city}>
                   <option>Şehir seçiniz.</option>
-                  <option value="1">Ağrı</option>
-                  <option value="2">Ardahan</option>
-                  <option value="3">Iğdır</option>
-                  <option value="4">Kars</option>
+                  <option value="Ağrı">Ağrı</option>
+                  <option value="Ardahan">Ardahan</option>
+                  <option value="Iğdır">Iğdır</option>
+                  <option value="Kars">Kars</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group
@@ -381,7 +424,7 @@ export default function MainDashboard() {
                 controlId="exampleForm.ControlTextarea1"
               >
                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
-                <Form.Control as="textarea" rows={2} />
+                <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
               </Form.Group>
             </Form>
           </Modal.Body>

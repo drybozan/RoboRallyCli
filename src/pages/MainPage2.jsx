@@ -1,35 +1,26 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import RoboRallyServerService from '../services/RoboRallyServerService';
 
-
-
-export default function MainDashboard() {
+export default function MainPage2() {
 
     const [screenWidth, setScreenWidth] = useState(window.innerWidth); //tarayıcı penceresinin mevcut genişliği  
     const [screenHeight, setScreenHeight] = useState(window.innerHeight); // tarayıcı penceresinin mevcut yüksekliği
 
     const navigate = useNavigate();
-    const location = useLocation();
-
+    const roboRallyServerService = new RoboRallyServerService();
 
     //yarismacı guncelleme modalı için
     const [showUpdate, setShowUpdate] = useState(false);
     const handleShowUpdateClose = () => setShowUpdate(false);
     const handleShowUpdateOpen = () => setShowUpdate(true);
 
-
-
     const [time, setTime] = useState({ minutes: 0, seconds: 0, milliseconds: 0 });
     const [isRunning, setIsRunning] = useState(false);
-
-    const receivedData = location.state;
-    // console.log("receivedData")
-    // console.log(receivedData)
-
-    const numOfSections = receivedData.key; // Kaç parça olacağını belirtin
+    const [competitors, setCompetitors] = useState([]); 
 
 
     useEffect(() => {
@@ -48,6 +39,26 @@ export default function MainDashboard() {
         return () => window.removeEventListener('resize', updateDimensions);
 
     }, []);
+
+
+  useEffect(() => {
+
+    roboRallyServerService.getAllCompetitorsByDuration().then(result => {
+    //   console.log("getAllCompetitorsByDuration")
+    //   console.log(result)
+
+      if (result.data.success === true) {
+        setCompetitors(result.data.data)
+      } else {
+        toast.error(result.data.message);
+
+      }
+    }).catch(e => {
+      console.error(e);
+    })
+
+
+  });
 
     async function previousPageClick() {
         navigate('/main')
@@ -123,7 +134,7 @@ export default function MainDashboard() {
 
     const sections = [];
 
-    for (let index = 0; index < numOfSections; index++) {
+    for (let index = 0; index < competitors.length; index++) {
         if (index >= 10 && index <= 19) {
             sections.push(
 
@@ -137,14 +148,9 @@ export default function MainDashboard() {
 
                     </div>
 
-                    <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> KARS  </div>
-                    <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> KARS ORTAOKUL </div>
-
-                    <div style={{ flex: "1",  fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-
-                        {formattedTime}
-
-                    </div>
+                    <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
+                    <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
+                    <div style={{ flex: "1",  fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration}</div>
                     <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
                         <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
