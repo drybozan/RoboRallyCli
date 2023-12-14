@@ -39,7 +39,8 @@ export default function Login() {
     async function OnClickLogin() {
 
         if (username === "" || password === "") {
-            console.log("Kullanıcı adı  veya şifre alanı boş olamaz.")
+           
+            toast.error("Kullanıcı adı  veya şifre alanı boş olamaz.");
         } else {
 
             roboRallyServerService.login(username, password).then(result => {

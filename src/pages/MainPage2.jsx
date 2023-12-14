@@ -127,7 +127,7 @@ export default function MainDashboard() {
         if (index >= 10 && index <= 19) {
             sections.push(
 
-                <div style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 255, 153, 0.3), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+                <div style={{ width: "95%",color: '#fff', height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
 
                     {/* sıralama kısmı */}
                     <div style={{ flex: "0.3" }}>
@@ -137,10 +137,10 @@ export default function MainDashboard() {
 
                     </div>
 
-                    <div style={{ flex: "0.5", color: '#000', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> KARS  </div>
+                    <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> KARS  </div>
                     <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> KARS ORTAOKUL </div>
 
-                    <div style={{ flex: "1", color: '#000', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+                    <div style={{ flex: "1",  fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
                         {formattedTime}
 
