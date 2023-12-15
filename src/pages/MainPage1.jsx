@@ -17,13 +17,10 @@ export default function MainPage1() {
 
   //yarismacı ekleme modalı için
   const [showAdd, setShowAdd] = useState(false);
-  const handleShowAddClose = () => setShowAdd(false);
-  const handleShowAddOpen = () => setShowAdd(true);
 
   //yarismacı guncelleme modalı için
   const [showUpdate, setShowUpdate] = useState(false);
-  const handleShowUpdateClose = () => setShowUpdate(false);
-  const handleShowUpdateOpen = () => setShowUpdate(true);
+
 
   // timer icin
   const [time, setTime] = useState({ minutes: 0, seconds: 0, milliseconds: 0 });
@@ -88,6 +85,21 @@ export default function MainPage1() {
     navigate('/')
   }
 
+  //yarismaci ekleme modal kapatma 
+  const handleShowAddClose = () => {
+    setShowAdd(false)
+    setCity("")
+    setName("")
+  };
+    //yarismaci ekleme modal acma
+  const handleShowAddOpen = () => setShowAdd(true);
+
+  //yarismaci guncelleme modal kapatma
+  const handleShowUpdateClose = () => setShowUpdate(false);
+
+    //yarismaci guncelleme modal acma
+  const handleShowUpdateOpen = () => setShowUpdate(true);
+
   // yarismacı düzenleme
   async function handleIconUpdateClick(index) {
 
@@ -104,7 +116,22 @@ export default function MainPage1() {
   }
 
 
-  async function handleIconDeleteClick() { }
+  async function handleIconDeleteClick(id) {
+
+    console.log("deleted id : ", id)
+
+    roboRallyServerService.deleteById(id).then(result => {
+
+      if (result.data.success === true) {
+        toast.success(result.data.message);
+      } else {
+        toast.error(result.data.message);
+
+      }
+    }).catch(e => {
+      console.error(e);
+    })
+  }
 
   async function addCompetitorClick() {
 
@@ -117,22 +144,22 @@ export default function MainPage1() {
     console.log("formattedTime")
     console.log(formattedTime)
 
-    if(city === ""){
+    if (city === "") {
 
       toast.warning("Lütfen şehir bilgisini giriniz.");
 
-    }else if(name === ""){
+    } else if (name === "") {
 
       toast.warning("Lütfen yarışmacı ismini giriniz.");
 
-    }else{
+    } else {
       roboRallyServerService.add(city, name, formattedTime, isStart).then(result => {
 
         if (result.data.success === true) {
           toast.success(result.data.message);
         } else {
           toast.error(result.data.message);
-  
+
         }
       }).catch(e => {
         console.error(e);
@@ -144,7 +171,7 @@ export default function MainPage1() {
         setIsStart(false)
       });
 
-    } 
+    }
   }
 
   useEffect(() => {
@@ -204,7 +231,7 @@ export default function MainPage1() {
         sections.push(
 
           // yarışmacıları listeleyen yatay cubuk
-          <div style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.8), rgba(220, 50, 5, 0.8))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+          <div key={competitors[index].id} style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.8), rgba(220, 50, 5, 0.8))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
 
             {/* sıralama kısmı */}
             <div style={{ flex: "0.3" }}>
@@ -220,6 +247,7 @@ export default function MainPage1() {
 
             </div>
 
+            {/* yarısmacı bilgileri*/}
             <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}</div>
             <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
             <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration}</div>
@@ -228,7 +256,7 @@ export default function MainPage1() {
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
               </div>
-              <div onClick={() => handleIconDeleteClick(index)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
+              <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
               </div>
 
@@ -242,7 +270,7 @@ export default function MainPage1() {
         sections.push(
 
           // yarışmacıları listeleyen yatay cubuk
-          <div style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.6), rgba(220, 50, 5, 0.7))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+          <div key={competitors[index].id} style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.6), rgba(220, 50, 5, 0.7))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
 
             {/* sıralama kısmı */}
             <div style={{ flex: "0.3" }}>
@@ -268,7 +296,7 @@ export default function MainPage1() {
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
               </div>
-              <div onClick={() => handleIconDeleteClick(index)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
+              <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
               </div>
 
@@ -282,7 +310,7 @@ export default function MainPage1() {
         sections.push(
 
           // yarışmacıları listeleyen yatay cubuk
-          <div style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.5), rgba(220, 50, 5, 0.6))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+          <div key={competitors[index].id} style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.5), rgba(220, 50, 5, 0.6))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
 
             {/* sıralama kısmı */}
             <div style={{ flex: "0.3" }}>
@@ -308,7 +336,7 @@ export default function MainPage1() {
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
               </div>
-              <div onClick={() => handleIconDeleteClick(index)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
+              <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
               </div>
 
@@ -323,7 +351,7 @@ export default function MainPage1() {
         sections.push(
 
           // yarışmacıları listeleyen yatay cubuk
-          <div style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+          <div key={competitors[index].id} style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
 
             {/* sıralama kısmı */}
             <div style={{ flex: "0.3" }}>
@@ -343,7 +371,7 @@ export default function MainPage1() {
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
               </div>
-              <div onClick={() => handleIconDeleteClick(index)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
+              <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
               </div>
 
@@ -376,10 +404,10 @@ export default function MainPage1() {
       </div>
 
 
-      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: "3%" }}>
+      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "3%" }}>
 
         {/* tablo başlıkları  */}
-        <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
+        <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
           <div style={{ flex: "0.3" }}></div>
           <div style={{ flex: "0.5" }}>ŞEHİR </div>
           <div style={{ flex: "2" }}> YARIŞMACI </div>
@@ -388,7 +416,6 @@ export default function MainPage1() {
             <img src={`${process.env.PUBLIC_URL}/start.png`} alt="start" style={{ width: '5vw', height: '6vh' }} />
           </div>
         </div>
-
 
         {/* tablonun gövdesi */}
         {sections}

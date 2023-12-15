@@ -45,6 +45,16 @@ export default class RoboRallyServerService {
         })
     }
 
+    deleteById(id) {
+
+        return axios({
+            method: 'delete',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/deleteById?id=${id}`,
+          
+        })
+    }
+
  
 
 }

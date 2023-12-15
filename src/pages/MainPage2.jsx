@@ -138,7 +138,7 @@ export default function MainPage2() {
         if (index >= 10 && index <= 19) {
             sections.push(
 
-                <div style={{ width: "95%",color: '#fff', height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+                <div key={competitors[index].id}  style={{ width: "95%",color: '#fff', height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
 
                     {/* sıralama kısmı */}
                     <div style={{ flex: "0.3" }}>
@@ -156,7 +156,7 @@ export default function MainPage2() {
                         <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                             <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
                         </div>
-                        <div onClick={() => handleIconDeleteClick(index)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
+                        <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
                             <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
                         </div>
 
@@ -174,16 +174,16 @@ export default function MainPage2() {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
 
                 <div onClick={() => logOutClick()} style={{ cursor: 'pointer' }}>
-                    <img src={`${process.env.PUBLIC_URL}/logout.png`} alt="logout" style={{ width: '7%', height: '7vh', position: 'fixed', top: '4%', right: '6%' }} />
+                    <img src={`${process.env.PUBLIC_URL}/logout.png`} alt="logout" style={{ width: '7%', height: '7vh', position: 'fixed', top: '3%', right: '6%' }} />
                 </div>
 
             </div>
 
 
-            <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: "0.1%" }}>
+            <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "0.1%" }}>
 
                 {/* tablo başlıkları  */}
-                <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
+                <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
                     <div style={{ flex: "0.3" }}></div>
                     <div style={{ flex: "0.5" }}>ŞEHİR </div>
                     <div style={{ flex: "2" }}> YARIŞMACI </div>
