@@ -159,7 +159,10 @@ export default function MainPage2() {
 
                     <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
                     <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
-                    <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration}</div>
+                    <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> 
+                    {competitors[index].duration > "05:00.000" ?
+                        (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
+                    </div>
                     <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
                         <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>

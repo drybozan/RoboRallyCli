@@ -19,7 +19,7 @@ export default class RoboRallyServerService {
         })
     }
 
-    add(city,name,duration,isStart) {
+    add(city,name,duration,isStart,eliminated) {
 
         return axios({
             method: 'post',
@@ -29,7 +29,8 @@ export default class RoboRallyServerService {
                 "city": city,
                 "name": name,
                 "duration":duration,
-                "start":isStart
+                "start":isStart,
+                "eliminated":eliminated
 
             }
         })
@@ -55,6 +56,30 @@ export default class RoboRallyServerService {
         })
     }
 
- 
+    update(id,city,name,eliminated) {
+
+        return axios({
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/update`,
+            data: {
+                "id":id,
+                "city": city,
+                "name": name,             
+                "eliminated":eliminated
+
+            }
+        })
+    }
+
+    getById(id) {
+
+        return axios({
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/getById?id=${id}`,
+          
+        })
+    }
 
 }

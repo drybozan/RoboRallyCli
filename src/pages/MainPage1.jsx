@@ -26,10 +26,11 @@ export default function MainPage1() {
   const [time, setTime] = useState({ minutes: 0, seconds: 0, milliseconds: 0 });
   const [isRunning, setIsRunning] = useState(false);
 
-
+  const [id, setId] = useState(0);
   const [city, setCity] = useState("");
   const [name, setName] = useState("");
   const [isStart, setIsStart] = useState(false);
+  const [isEliminated, setEliminated] = useState(false);
 
   const [competitors, setCompetitors] = useState([]);
 
@@ -91,28 +92,94 @@ export default function MainPage1() {
     setCity("")
     setName("")
   };
-    //yarismaci ekleme modal acma
+  //yarismaci ekleme modal acma
   const handleShowAddOpen = () => setShowAdd(true);
 
-  //yarismaci guncelleme modal kapatma
-  const handleShowUpdateClose = () => setShowUpdate(false);
 
-    //yarismaci guncelleme modal acma
+  //yarismaci guncelleme modal kapatma
+  const handleShowUpdateClose = () => {
+    setId(0)
+    setCity("")
+    setName("")
+    setEliminated(false)
+    setShowUpdate(false)
+  };
+
+  //yarismaci guncelleme modal acma
   const handleShowUpdateOpen = () => setShowUpdate(true);
 
   // yarismacı düzenleme
-  async function handleIconUpdateClick(index) {
+  async function handleIconUpdateClick(_id) {
+    console.log("update click id : ", _id)
 
-    console.log("update click index : ")
-    console.log(index)
+    roboRallyServerService.getById(_id).then(result => {
+
+      if (result.data.success === true) {
+        console.log("result")
+        console.log(result.data.data)
+        setId(result.data.data.id)
+        setCity(result.data.data.city)
+        setName(result.data.data.name)
+        setEliminated(result.data.data.eliminated)
+      } else {
+        toast.error(result.data.message);
+
+      }
+    }).catch(e => {
+      console.error(e);
+    })
     //modal aç
     handleShowUpdateOpen()
   }
 
   async function updateCompetitorClick() {
 
-    //modal kapat
-    handleShowUpdateClose()
+    console.log("id")
+    console.log(id)
+
+    console.log("city")
+    console.log(city)
+
+    console.log("name")
+    console.log(name)
+
+    console.log("isEliminated")
+    console.log(isEliminated)
+
+    if (city === "") {
+
+      toast.warning("Lütfen şehir bilgisini giriniz.");
+
+    } else if (name === "") {
+
+      toast.warning("Lütfen yarışmacı ismini giriniz.");
+
+    } else {
+      roboRallyServerService.update(id, city, name, isEliminated).then(result => {
+
+        console.log("update result")
+        console.log(result)
+
+        if (result.data.success === true) {
+          toast.success(result.data.message);
+        } else {
+          toast.error(result.data.message);
+
+        }
+      }).catch(e => {
+        console.error(e);
+      }).finally(() => {
+        //modal kapat
+        handleShowUpdateClose()
+        setId(0)
+        setCity("")
+        setName("")
+        setEliminated(false)
+        
+      });
+
+
+    }
   }
 
 
@@ -153,7 +220,7 @@ export default function MainPage1() {
       toast.warning("Lütfen yarışmacı ismini giriniz.");
 
     } else {
-      roboRallyServerService.add(city, name, formattedTime, isStart).then(result => {
+      roboRallyServerService.add(city, name, formattedTime, isStart, isEliminated).then(result => {
 
         if (result.data.success === true) {
           toast.success(result.data.message);
@@ -250,10 +317,13 @@ export default function MainPage1() {
             {/* yarısmacı bilgileri*/}
             <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}</div>
             <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration}</div>
+            <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+              {competitors[index].duration > "05:00.000" ? (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
+            </div>
+
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
-              <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
+              <div onClick={() => handleIconUpdateClick(competitors[index].id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
               </div>
               <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
@@ -290,10 +360,13 @@ export default function MainPage1() {
 
             <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()} </div>
             <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration.toUpperCase()}</div>
+            <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+              {competitors[index].duration > "05:00.000" ? (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
+            </div>
+
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
-              <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
+              <div onClick={() => handleIconUpdateClick(competitors[index].id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
               </div>
               <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
@@ -330,10 +403,12 @@ export default function MainPage1() {
 
             <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
             <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}   </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>  {competitors[index].duration}  </div>
+            <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+              {competitors[index].duration > "05:00.000" ? (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
+            </div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
-              <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
+              <div onClick={() => handleIconUpdateClick(competitors[index].id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
               </div>
               <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
@@ -365,10 +440,12 @@ export default function MainPage1() {
 
             <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitors[index].city.toUpperCase()}</div>
             <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}</div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitors[index].duration}</div>
+            <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+              {competitors[index].duration > "05:00.000" ? (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
+            </div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
-              <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
+              <div onClick={() => handleIconUpdateClick(competitors[index].id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                 <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
               </div>
               <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
@@ -404,7 +481,7 @@ export default function MainPage1() {
       </div>
 
 
-      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "3%"}}>
+      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "3%" }}>
 
         {/* tablo başlıkları  */}
         <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
@@ -414,7 +491,7 @@ export default function MainPage1() {
           <div style={{ flex: "1" }}> SÜRE </div>
           <div style={{ flex: "0.5" }}
           //  onClick={() => handleStartStopClick()}
-           >
+          >
             {/* <img src={`${process.env.PUBLIC_URL}/start.png`} alt="start" style={{ width: '5vw', height: '6vh' }} /> */}
           </div>
         </div>
@@ -476,12 +553,14 @@ export default function MainPage1() {
             <Form>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>ŞEHİR</Form.Label>
-                <Form.Select aria-label="Default select example">
-                  <option>Şehir seçiniz.</option>
-                  <option value="1">Ağrı</option>
-                  <option value="2">Ardahan</option>
-                  <option value="3">Iğdır</option>
-                  <option value="4">Kars</option>
+                <Form.Select aria-label="Default select example" onChange={(e) => setCity(e.target.value)} value={city || ''}>
+                  <option disabled={!city} hidden={!city} value="">
+                    {city || 'Şehir seçiniz.'}
+                  </option>
+                  <option value="Ağrı">Ağrı</option>
+                  <option value="Ardahan">Ardahan</option>
+                  <option value="Iğdır">Iğdır</option>
+                  <option value="Kars">Kars</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group
@@ -489,13 +568,15 @@ export default function MainPage1() {
                 controlId="exampleForm.ControlTextarea1"
               >
                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
-                <Form.Control as="textarea" rows={2} />
+                <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
               </Form.Group>
 
               <Form.Check // prettier-ignore
                 type="switch"
                 id="custom-switch"
-                label="Yarışmacıyı devre dışı bırak."
+                label="Yarışmacıyı devre dışı bırak"
+                checked={isEliminated}
+                onChange={(e) => setEliminated(e.target.checked)}
               />
             </Form>
           </Modal.Body>
