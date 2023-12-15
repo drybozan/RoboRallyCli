@@ -231,7 +231,7 @@ export default function MainPage1() {
         sections.push(
 
           // yarışmacıları listeleyen yatay cubuk
-          <div key={competitors[index].id} style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.8), rgba(220, 50, 5, 0.8))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+          <div key={competitors[index].id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.8), rgba(220, 50, 5, 0.8))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
 
             {/* sıralama kısmı */}
             <div style={{ flex: "0.3" }}>
@@ -248,9 +248,9 @@ export default function MainPage1() {
             </div>
 
             {/* yarısmacı bilgileri*/}
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}</div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration}</div>
+            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}</div>
+            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration}</div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
@@ -270,7 +270,7 @@ export default function MainPage1() {
         sections.push(
 
           // yarışmacıları listeleyen yatay cubuk
-          <div key={competitors[index].id} style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.6), rgba(220, 50, 5, 0.7))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+          <div key={competitors[index].id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.6), rgba(220, 50, 5, 0.7))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
 
             {/* sıralama kısmı */}
             <div style={{ flex: "0.3" }}>
@@ -288,9 +288,9 @@ export default function MainPage1() {
 
             </div>
 
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()} </div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration.toUpperCase()}</div>
+            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()} </div>
+            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration.toUpperCase()}</div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
@@ -310,7 +310,7 @@ export default function MainPage1() {
         sections.push(
 
           // yarışmacıları listeleyen yatay cubuk
-          <div key={competitors[index].id} style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.5), rgba(220, 50, 5, 0.6))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+          <div key={competitors[index].id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.5), rgba(220, 50, 5, 0.6))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
 
             {/* sıralama kısmı */}
             <div style={{ flex: "0.3" }}>
@@ -328,9 +328,9 @@ export default function MainPage1() {
 
             </div>
 
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}   </div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>  {competitors[index].duration}  </div>
+            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
+            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}   </div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>  {competitors[index].duration}  </div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
@@ -351,21 +351,21 @@ export default function MainPage1() {
         sections.push(
 
           // yarışmacıları listeleyen yatay cubuk
-          <div key={competitors[index].id} style={{ width: "95%", height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+          <div key={competitors[index].id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
 
             {/* sıralama kısmı */}
             <div style={{ flex: "0.3" }}>
 
               {index !== 0 && index !== 1 && index !== 2 && (
 
-                <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="122" height="122" style={{ alignSelf: 'flex-start', marginLeft: '-55px' }} />
+                <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px' }} />
 
               )}
             </div>
 
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitors[index].city.toUpperCase()}</div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}</div>
-            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitors[index].duration}</div>
+            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitors[index].city.toUpperCase()}</div>
+            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}</div>
+            <div style={{ flex: "1", color: 'white', fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitors[index].duration}</div>
             <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
               <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
@@ -404,7 +404,7 @@ export default function MainPage1() {
       </div>
 
 
-      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "3%" }}>
+      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "3%"}}>
 
         {/* tablo başlıkları  */}
         <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
@@ -412,8 +412,10 @@ export default function MainPage1() {
           <div style={{ flex: "0.5" }}>ŞEHİR </div>
           <div style={{ flex: "2" }}> YARIŞMACI </div>
           <div style={{ flex: "1" }}> SÜRE </div>
-          <div style={{ flex: "0.5" }} onClick={() => handleStartStopClick()}>
-            <img src={`${process.env.PUBLIC_URL}/start.png`} alt="start" style={{ width: '5vw', height: '6vh' }} />
+          <div style={{ flex: "0.5" }}
+          //  onClick={() => handleStartStopClick()}
+           >
+            {/* <img src={`${process.env.PUBLIC_URL}/start.png`} alt="start" style={{ width: '5vw', height: '6vh' }} /> */}
           </div>
         </div>
 

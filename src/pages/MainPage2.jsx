@@ -20,7 +20,7 @@ export default function MainPage2() {
 
     const [time, setTime] = useState({ minutes: 0, seconds: 0, milliseconds: 0 });
     const [isRunning, setIsRunning] = useState(false);
-    const [competitors, setCompetitors] = useState([]); 
+    const [competitors, setCompetitors] = useState([]);
 
 
     useEffect(() => {
@@ -41,24 +41,24 @@ export default function MainPage2() {
     }, []);
 
 
-  useEffect(() => {
+    useEffect(() => {
 
-    roboRallyServerService.getAllCompetitorsByDuration().then(result => {
-    //   console.log("getAllCompetitorsByDuration")
-    //   console.log(result)
+        roboRallyServerService.getAllCompetitorsByDuration().then(result => {
+            //   console.log("getAllCompetitorsByDuration")
+            //   console.log(result)
 
-      if (result.data.success === true) {
-        setCompetitors(result.data.data)
-      } else {
-        toast.error(result.data.message);
+            if (result.data.success === true) {
+                setCompetitors(result.data.data)
+            } else {
+                toast.error(result.data.message);
 
-      }
-    }).catch(e => {
-      console.error(e);
-    })
+            }
+        }).catch(e => {
+            console.error(e);
+        })
 
 
-  });
+    });
 
     async function previousPageClick() {
         navigate('/main')
@@ -138,19 +138,28 @@ export default function MainPage2() {
         if (index >= 10 && index <= 19) {
             sections.push(
 
-                <div key={competitors[index].id}  style={{ width: "95%",color: '#fff', height: "8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.5%", border: "2px solid white" }}>
+                <div key={competitors[index].id} style={{ width: "95%", color: '#fff', height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
 
                     {/* sıralama kısmı */}
                     <div style={{ flex: "0.3" }}>
 
-                        <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="122" height="122" style={{ alignSelf: 'flex-start', marginLeft: '-55px' }} />
+                        {index === 12 && (
+                            <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px',marginBottom: '8px'}} />
+                        )}
 
+                        {index === 14 && (
+                            <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px',marginTop: '7px' }} />
+                        )}
+
+                        {index !== 12 && index !== 14 && (
+                            <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px' }} />
+                        )}
 
                     </div>
 
-                    <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
-                    <div style={{ flex: "2", fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
-                    <div style={{ flex: "1",  fontWeight: 'bold', fontSize: "35px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration}</div>
+                    <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
+                    <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
+                    <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].duration}</div>
                     <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
 
                         <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
@@ -199,7 +208,7 @@ export default function MainPage2() {
 
             <div style={{ display: 'flex', justifyContent: 'center' }}>
 
-                <img src={`${process.env.PUBLIC_URL}/homeLogo2.png`} alt="sunnyTeknolojiLogo" style={{ width: '18%', height: '13vh', position: 'fixed', bottom: '-1%', left: '37%' }} />
+                <img src={`${process.env.PUBLIC_URL}/homeLogo2.png`} alt="sunnyTeknolojiLogo" style={{ width: '14%', height: '13vh', position: 'fixed', bottom: '-1%', left: '42%' }} />
             </div>
 
             <div onClick={() => previousPageClick()} style={{ cursor: 'pointer' }}>
