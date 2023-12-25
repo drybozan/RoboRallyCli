@@ -4,6 +4,7 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import RoboRallyServerService from '../services/RoboRallyServerService';
+import useRaceTimer from '../utilities/useRaceTimer';
 
 
 export default function MainPage1() {
@@ -24,7 +25,8 @@ export default function MainPage1() {
 
   // timer icin
   const [time, setTime] = useState({ minutes: 0, seconds: 0, milliseconds: 0 });
-  const [isRunning, setIsRunning] = useState(false);
+  const formattedTime = `${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}:${String(time.milliseconds).padStart(3, '0')}`;
+
 
   const [id, setId] = useState(0);
   const [city, setCity] = useState("");
@@ -34,7 +36,8 @@ export default function MainPage1() {
 
   const [competitors, setCompetitors] = useState([]);
 
-  const formattedTime = `${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}.${String(time.milliseconds).padStart(3, '0')}`;
+
+
 
 
 
@@ -175,7 +178,7 @@ export default function MainPage1() {
         setCity("")
         setName("")
         setEliminated(false)
-        
+
       });
 
 
@@ -241,224 +244,82 @@ export default function MainPage1() {
     }
   }
 
-  useEffect(() => {
-
-    let intervalId;
-
-    if (isRunning) {
-      intervalId = setInterval(() => {
-        // Süreyi güncelle
-        setTime((prevTime) => {
-          const newMilliseconds = prevTime.milliseconds + 10;
-
-          // 1000 milisaniye 1 saniyedir
-          if (newMilliseconds === 1000) {
-            return {
-              minutes: prevTime.minutes,
-              seconds: prevTime.seconds + 1,
-              milliseconds: 0,
-            };
-          }
-
-          // 60 saniye 1 dakikadır
-          if (prevTime.seconds === 60) {
-            return {
-              minutes: prevTime.minutes + 1,
-              seconds: 0,
-              milliseconds: 0,
-            };
-          }
-
-          return {
-            ...prevTime,
-            milliseconds: newMilliseconds,
-          };
-        });
-      }, 10); // Her 10 milisaniyede bir güncelle
-    }
-
-    // Temizleme işlemi
-    return () => clearInterval(intervalId);
-  }, [isRunning]);
-
-  const handleStartStopClick = () => {
-    setIsRunning(!isRunning);
-  };
-
-
-
-  const sections = [];
 
   const numOfSections = competitors.length; // Kaç parça olacağını belirt
+  const { timers, startTimer, stopTimer, getElapsedTime } = useRaceTimer(numOfSections);
 
-  for (let index = 0; index < numOfSections; index++) {
-    if (index >= 0 && index <= 9) {
-      if (index === 0) {
 
-        sections.push(
 
-          // yarışmacıları listeleyen yatay cubuk
-          <div key={competitors[index].id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.8), rgba(220, 50, 5, 0.8))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
+  // Helper function to get gradient colors based on index
+  const getGradientColors = (index) => {
+    // Define your gradient colors logic here
+    const gradientColors = [
+      `linear-gradient(to left, rgba(255, 227, 0, 0.8), rgba(220, 50, 5, 0.8))`,
+      `linear-gradient(to left, rgba(255, 227, 0, 0.6), rgba(220, 50, 5, 0.7))`,
+      `linear-gradient(to left, rgba(255, 227, 0, 0.5), rgba(220, 50, 5, 0.6))`,
+      `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`,
+    ];
+    return gradientColors[index] || gradientColors[gradientColors.length - 1];
+  };
 
-            {/* sıralama kısmı */}
-            <div style={{ flex: "0.3" }}>
+  // Helper function to get medal icon based on index
+  const getMedalIcon = (index) => {
+    const medalIcons = ['1.png', '2.png', '3.png'];
+    return medalIcons[index] || `${index + 1}.png`;
+  };
 
-              {/* sıralamanın yazıldığı yuvarlaklar*/}
-              <div style={{ width: "60%", height: "100%", borderRadius: "50%" }}>
-                {index === 0 && (
+  const sections = competitors.slice(0, 10).map((competitor, index) => {
 
-                  <img src={`${process.env.PUBLIC_URL}/1.png`} alt="Icon gold" width="100" height="100" style={{ alignSelf: 'flex-start', marginLeft: '-20px' }} />
-                )}
+    // index numarasına göre div boya koyudan açık renge doğru
+    const gradientColors = getGradientColors(index);
+    // index bilgisine göre sıralama toplarını listele.
+    const medalIcon = getMedalIcon(index);
 
-              </div>
+    return (
+      // yarışmacıları listeleyen yatay cubuk
+      <div key={competitor.id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: gradientColors, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
 
-            </div>
+        {/* sıralama kısmı */}
+        <div style={{ flex: "0.3" }}>
+          {/* sıralamanın yazıldığı yuvarlaklar*/}
+          <div style={{ width: "60%", height: "100%", borderRadius: "50%" }}>
 
-            {/* yarısmacı bilgileri*/}
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}</div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
-            <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-              {competitors[index].duration > "05:00.000" ? (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
-            </div>
+            {index < 3 && (
+              <img src={`${process.env.PUBLIC_URL}/${medalIcon}`} alt={`Icon ${index + 1}`} width="100" height="100" style={{ alignSelf: 'flex-start', marginLeft: '-20px' }} />
+            )}
 
-            <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+            {index !== 0 && index !== 1 && index !== 2 && (
 
-              <div onClick={() => handleIconUpdateClick(competitors[index].id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
-                <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
-              </div>
-              <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
-                <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
-              </div>
+              <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-36px' }} />
 
-            </div>
+            )}
+
           </div>
+        </div>
 
-        );
+        {/* yarısmacı bilgileri*/}
+        <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
+        <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
+        <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
 
-      } else if (index === 1) {
+          {/* <div>{formatTime(getElapsedTime(index))}</div> */}
 
-        sections.push(
+        </div>
 
-          // yarışmacıları listeleyen yatay cubuk
-          <div key={competitors[index].id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.6), rgba(220, 50, 5, 0.7))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
-
-            {/* sıralama kısmı */}
-            <div style={{ flex: "0.3" }}>
-
-              {/* sıralamanın yazıldığı yuvarlaklar*/}
-              <div style={{ width: "60%", height: "100%", borderRadius: "50%" }}>
-
-                {index === 1 && (
-
-                  <img src={`${process.env.PUBLIC_URL}/2.png`} alt="Icon silver" width="100" height="100" style={{ alignSelf: 'flex-start', marginLeft: '-20px' }} />
-
-                )}
-
-              </div>
-
-            </div>
-
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()} </div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
-            <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-              {competitors[index].duration > "05:00.000" ? (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
-            </div>
-
-            <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-
-              <div onClick={() => handleIconUpdateClick(competitors[index].id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
-                <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
-              </div>
-              <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
-                <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
-              </div>
-
-            </div>
+        <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          <Button onClick={() => startTimer(competitor.id, index)} >Start</Button>
+          <Button onClick={() => stopTimer(competitor.id, index)} >Stop</Button>
+          <div onClick={() => handleIconUpdateClick(competitor.id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
+            <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
           </div>
-
-        );
-
-      } else if (index === 2) {
-
-        sections.push(
-
-          // yarışmacıları listeleyen yatay cubuk
-          <div key={competitors[index].id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.5), rgba(220, 50, 5, 0.6))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
-
-            {/* sıralama kısmı */}
-            <div style={{ flex: "0.3" }}>
-
-              {/* sıralamanın yazıldığı yuvarlaklar*/}
-              <div style={{ width: "60%", height: "100%", borderRadius: "50%" }}>
-
-                {index === 2 && (
-
-                  <img src={`${process.env.PUBLIC_URL}/3.png`} alt="Icon bronz" width="100" height="100" style={{ alignSelf: 'flex-start', marginLeft: '-20px' }} />
-
-                )}
-
-              </div>
-
-            </div>
-
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}   </div>
-            <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-              {competitors[index].duration > "05:00.000" ? (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
-            </div>
-            <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-
-              <div onClick={() => handleIconUpdateClick(competitors[index].id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
-                <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
-              </div>
-              <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
-                <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
-              </div>
-
-            </div>
+          <div onClick={() => handleIconDeleteClick(competitor.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
+            <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
           </div>
-
-        );
-
-      } else {
-
-
-        sections.push(
-
-          // yarışmacıları listeleyen yatay cubuk
-          <div key={competitors[index].id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
-
-            {/* sıralama kısmı */}
-            <div style={{ flex: "0.3" }}>
-
-              {index !== 0 && index !== 1 && index !== 2 && (
-
-                <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px' }} />
-
-              )}
-            </div>
-
-            <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitors[index].city.toUpperCase()}</div>
-            <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()}</div>
-            <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-              {competitors[index].duration > "05:00.000" ? (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
-            </div>
-            <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-
-              <div onClick={() => handleIconUpdateClick(competitors[index].id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
-                <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
-              </div>
-              <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
-                <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
-              </div>
-
-            </div>
-          </div>
-
-        );
-      }
-    }
-  }
+        </div>
+      </div>
+    );
+  });
 
 
 
@@ -489,11 +350,7 @@ export default function MainPage1() {
           <div style={{ flex: "0.5" }}>ŞEHİR </div>
           <div style={{ flex: "2" }}> YARIŞMACI </div>
           <div style={{ flex: "1" }}> SÜRE </div>
-          <div style={{ flex: "0.5" }}
-          //  onClick={() => handleStartStopClick()}
-          >
-            {/* <img src={`${process.env.PUBLIC_URL}/start.png`} alt="start" style={{ width: '5vw', height: '6vh' }} /> */}
-          </div>
+          <div style={{ flex: "0.5" }}> </div>
         </div>
 
         {/* tablonun gövdesi */}

@@ -82,4 +82,14 @@ export default class RoboRallyServerService {
         })
     }
 
+    updateDurationById(id,duration) {
+
+        return axios({
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateDurationById?id=${id}&duration=${duration}`,
+          
+        })
+    }
+
 }
