@@ -17,10 +17,14 @@ export default function MainPage2() {
 
     //yarismacı guncelleme modalı için
     const [showUpdate, setShowUpdate] = useState(false);
-    const handleShowUpdateClose = () => setShowUpdate(false);
-    const handleShowUpdateOpen = () => setShowUpdate(true);
+
 
     const [competitors, setCompetitors] = useState([]);
+    const [id, setId] = useState(0);
+    const [city, setCity] = useState("");
+    const [name, setName] = useState("");
+    const [isStart, setIsStart] = useState(false);
+    const [isEliminated, setEliminated] = useState(false);
 
 
     useEffect(() => {
@@ -70,74 +74,110 @@ export default function MainPage2() {
     }
 
 
-    // yarismacı düzenleme
-    async function handleIconUpdateClick(index) {
+    //yarismaci guncelleme modal kapatma
+    const handleShowUpdateClose = () => {
+        setId(0)
+        setCity("")
+        setName("")
+        setEliminated(false)
+        setShowUpdate(false)
+    };
 
-        console.log("update click index : ")
-        console.log(index)
+    //yarismaci guncelleme modal acma
+    const handleShowUpdateOpen = () => setShowUpdate(true);
+
+    // yarismacı düzenleme
+    async function handleIconUpdateClick(_id) {
+        console.log("update click id : ", _id)
+
+        roboRallyServerService.getById(_id).then(result => {
+
+            if (result.data.success === true) {
+                console.log("result")
+                console.log(result.data.data)
+                setId(result.data.data.id)
+                setCity(result.data.data.city.toUpperCase())
+                setName(result.data.data.name)
+                setEliminated(result.data.data.eliminated)
+            } else {
+                toast.error(result.data.message);
+
+            }
+        }).catch(e => {
+            console.error(e);
+        })
         //modal aç
         handleShowUpdateOpen()
     }
 
     async function updateCompetitorClick() {
 
-        //modal kapat
-        handleShowUpdateClose()
+        console.log("id")
+        console.log(id)
+
+        console.log("city")
+        console.log(city)
+
+        console.log("name")
+        console.log(name)
+
+        console.log("isEliminated")
+        console.log(isEliminated)
+
+        if (city === "") {
+
+            toast.warning("Lütfen şehir bilgisini giriniz.");
+
+        } else if (name === "") {
+
+            toast.warning("Lütfen yarışmacı ismini giriniz.");
+
+        } else {
+            roboRallyServerService.update(id, city, name, isEliminated).then(result => {
+
+                console.log("update result")
+                console.log(result)
+
+                if (result.data.success === true) {
+                    toast.success(result.data.message);
+                } else {
+                    toast.error(result.data.message);
+
+                }
+            }).catch(e => {
+                console.error(e);
+            }).finally(() => {
+                //modal kapat
+                handleShowUpdateClose()
+                setId(0)
+                setCity("")
+                setName("")
+                setEliminated(false)
+
+            });
+
+
+        }
     }
 
 
-    async function handleIconDeleteClick() { }
+    async function handleIconDeleteClick(id) {
 
+        console.log("deleted id : ", id)
 
+        roboRallyServerService.deleteById(id).then(result => {
 
+            if (result.data.success === true) {
+                toast.success(result.data.message);
+            } else {
+                toast.error(result.data.message);
 
+            }
+        }).catch(e => {
+            console.error(e);
+        })
+    }
 
-    // const sections = [];
-
-    // for (let index = 0; index < competitors.length; index++) {
-    //     if (index >= 10 && index <= 19) {
-    //         sections.push(
-
-    //             <div key={competitors[index].id} style={{ width: "95%", color: '#fff', height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
-
-    //                 {/* sıralama kısmı */}
-    //                 <div style={{ flex: "0.3" }}>
-
-    //                     {index === 12 && (
-    //                         <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px',marginBottom: '8px'}} />
-    //                     )}
-
-    //                     {index === 14 && (
-    //                         <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px',marginTop: '7px' }} />
-    //                     )}
-
-    //                     {index !== 12 && index !== 14 && (
-    //                         <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px' }} />
-    //                     )}
-
-    //                 </div>
-
-    //                 <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].city.toUpperCase()}  </div>
-    //                 <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> {competitors[index].name.toUpperCase()} </div>
-    //                 <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", fontStyle: 'italic', fontFamily: 'New Times Roman' }}> 
-    //                 {competitors[index].eliminated === true ? (<img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" />) : competitors[index].duration}
-
-    //                 </div>
-    //                 <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-
-    //                     <div onClick={() => handleIconUpdateClick(index)} style={{ cursor: 'pointer', marginRight: '5px' }}>
-    //                         <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
-    //                     </div>
-    //                     <div onClick={() => handleIconDeleteClick(competitors[index].id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
-    //                         <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
-    //                     </div>
-
-    //                 </div>
-    //             </div>
-
-    //         );
-    //     }
-    // }
 
     const numOfSections = competitors.length; // Kaç parça olacağını belirt
     const { timers, startTimer, stopTimer, getElapsedTime } = useRaceTimer(numOfSections);
@@ -148,7 +188,7 @@ export default function MainPage2() {
 
         return (
             // yarışmacıları listeleyen yatay cubuk
-            <div key={competitor.id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
+            <div key={competitor.id} style={{ width: "95%", height: "8.8%", borderRadius: "50px", backgroundImage: `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
 
                 {/* sıralama kısmı */}
                 <div style={{ flex: "0.3" }}>
@@ -168,17 +208,15 @@ export default function MainPage2() {
 
                 {/* yarısmacı bilgileri*/}
                 <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
-                <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
-                <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+                <div style={{ flex: "3",fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
+                <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
                     {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
-
-                    {/* <div>{formatTime(getElapsedTime(index))}</div> */}
 
                 </div>
 
                 <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                    <Button onClick={() => startTimer(competitor.id, adjustedIndex)} >Start</Button>
-                    <Button onClick={() => stopTimer(competitor.id, adjustedIndex)} >Stop</Button>
+                    {/* <Button onClick={() => startTimer(competitor.id, adjustedIndex)} >Start</Button>
+                    <Button onClick={() => stopTimer(competitor.id, adjustedIndex)} >Stop</Button> */}
                     <div onClick={() => handleIconUpdateClick(competitor.id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                         <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
                     </div>
@@ -211,8 +249,8 @@ export default function MainPage2() {
                 <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
                     <div style={{ flex: "0.3" }}></div>
                     <div style={{ flex: "0.5" }}>ŞEHİR </div>
-                    <div style={{ flex: "2" }}> YARIŞMACI </div>
-                    <div style={{ flex: "1" }}> SÜRE </div>
+                    <div style={{ flex: "3" }}> YARIŞMACI </div>
+                    <div style={{ flex: "0.5" }}> SÜRE </div>
                     <div style={{ flex: "0.5" }}></div>
                 </div>
 
@@ -224,7 +262,7 @@ export default function MainPage2() {
 
             <div style={{ display: 'flex', justifyContent: 'center' }}>
 
-                <img src={`${process.env.PUBLIC_URL}/homeLogo2.png`} alt="sunnyTeknolojiLogo" style={{ width: '14%', height: '13vh', position: 'fixed', bottom: '-1%', left: '42%' }} />
+                <img src={`${process.env.PUBLIC_URL}/homeLogo2.png`} alt="sunnyTeknolojiLogo" style={{ width: '14%', height: '13vh', position: 'fixed', bottom: '-1%', left: '40%' }} />
             </div>
 
             <div onClick={() => previousPageClick()} style={{ cursor: 'pointer' }}>
@@ -232,6 +270,7 @@ export default function MainPage2() {
             </div>
 
             {/* YARIŞMACI DÜZENLEME MODAL */}
+
 
             <>
                 <Modal show={showUpdate} centered>
@@ -242,12 +281,14 @@ export default function MainPage2() {
                         <Form>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>ŞEHİR</Form.Label>
-                                <Form.Select aria-label="Default select example">
-                                    <option>Şehir seçiniz.</option>
-                                    <option value="1">Ağrı</option>
-                                    <option value="2">Ardahan</option>
-                                    <option value="3">Iğdır</option>
-                                    <option value="4">Kars</option>
+                                <Form.Select aria-label="Default select example" onChange={(e) => setCity(e.target.value.toUpperCase())} value={city || ''}>
+                                    <option disabled={!city} hidden={!city} value="">
+                                        {city || 'Şehir seçiniz.'}
+                                    </option>
+                                    <option value="AĞRI">AĞRI</option>
+                                    <option value="ARDAHAN">ARDAHAN</option>
+                                    <option value="IĞDIR">IĞDIR</option>
+                                    <option value="KARS">KARS</option>
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group
@@ -255,17 +296,18 @@ export default function MainPage2() {
                                 controlId="exampleForm.ControlTextarea1"
                             >
                                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
-                                <Form.Control as="textarea" rows={2} />
+                                <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
                             </Form.Group>
 
                             <Form.Check // prettier-ignore
                                 type="switch"
                                 id="custom-switch"
-                                label="Yarışmacıyı devre dışı bırak."
+                                label="Yarışmacıyı devre dışı bırak"
+                                checked={isEliminated}
+                                onChange={(e) => setEliminated(e.target.checked)}
                             />
                         </Form>
                     </Modal.Body>
-
                     <Modal.Footer>
 
                         <Button variant="outline-danger" onClick={handleShowUpdateClose} >

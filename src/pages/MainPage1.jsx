@@ -5,6 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import RoboRallyServerService from '../services/RoboRallyServerService';
 import useRaceTimer from '../utilities/useRaceTimer';
+import useWebSocket from '../utilities/useWebSocket';
+
 
 
 export default function MainPage1() {
@@ -36,9 +38,13 @@ export default function MainPage1() {
 
   const [competitors, setCompetitors] = useState([]);
 
+  // WebSocket bağlantısı ve gelen verileri işleme
+  useWebSocket('/competitors', (data) => {
+    setCompetitors(data);
+  });
 
-
-
+  console.log("competitors")
+  console.log(competitors)
 
 
   useEffect(() => {
@@ -58,25 +64,7 @@ export default function MainPage1() {
 
   }, []);
 
-  useEffect(() => {
 
-    roboRallyServerService.getAllCompetitorsByDuration().then(result => {
-
-      // console.log("getAllCompetitorsByDuration")
-      // console.log(result)
-
-      if (result.data.success === true) {
-        setCompetitors(result.data.data)
-      } else {
-        toast.error(result.data.message);
-
-      }
-    }).catch(e => {
-      console.error(e);
-    })
-
-
-  });
 
 
   async function nextPageClick() {
@@ -121,7 +109,7 @@ export default function MainPage1() {
         console.log("result")
         console.log(result.data.data)
         setId(result.data.data.id)
-        setCity(result.data.data.city)
+        setCity(result.data.data.city.toUpperCase())
         setName(result.data.data.name)
         setEliminated(result.data.data.eliminated)
       } else {
@@ -277,7 +265,7 @@ export default function MainPage1() {
 
     return (
       // yarışmacıları listeleyen yatay cubuk
-      <div key={competitor.id} style={{ width: "95%", height: "8.5%", borderRadius: "50px", backgroundImage: gradientColors, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
+      <div key={competitor.id} style={{ width: "95%", height: "8.8%", borderRadius: "50px", backgroundImage: gradientColors, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
 
         {/* sıralama kısmı */}
         <div style={{ flex: "0.3" }}>
@@ -299,8 +287,8 @@ export default function MainPage1() {
 
         {/* yarısmacı bilgileri*/}
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
-        <div style={{ flex: "2", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
-        <div style={{ flex: "1", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+        <div style={{ flex: "3", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
+        <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
           {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
 
           {/* <div>{formatTime(getElapsedTime(index))}</div> */}
@@ -308,8 +296,8 @@ export default function MainPage1() {
         </div>
 
         <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-          <Button onClick={() => startTimer(competitor.id, index)} >Start</Button>
-          <Button onClick={() => stopTimer(competitor.id, index)} >Stop</Button>
+          {/* <Button onClick={() => startTimer(competitor.id, index)} >Start</Button>
+          <Button onClick={() => stopTimer(competitor.id, index)} >Stop</Button> */}
           <div onClick={() => handleIconUpdateClick(competitor.id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
             <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
           </div>
@@ -348,8 +336,8 @@ export default function MainPage1() {
         <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
           <div style={{ flex: "0.3" }}></div>
           <div style={{ flex: "0.5" }}>ŞEHİR </div>
-          <div style={{ flex: "2" }}> YARIŞMACI </div>
-          <div style={{ flex: "1" }}> SÜRE </div>
+          <div style={{ flex: "3" }}> YARIŞMACI </div>
+          <div style={{ flex: "0.5" }}> SÜRE </div>
           <div style={{ flex: "0.5" }}> </div>
         </div>
 
@@ -359,7 +347,7 @@ export default function MainPage1() {
       </div>
 
       <div onClick={() => nextPageClick()} style={{ cursor: 'pointer' }}>
-        <img src={`${process.env.PUBLIC_URL}/firstPage.png`} alt="first page" style={{ width: '6%', height: '7vh', position: 'fixed', bottom: '2%', right: '7%' }} />
+        <img src={`${process.env.PUBLIC_URL}/firstPage.png`} alt="first page" style={{ width: '6%', height: '7vh', position: 'fixed', bottom: '1.2%', right: '7%' }} />
       </div>
 
       {/* YARIŞMACI EKLEME MODAL */}
@@ -374,12 +362,12 @@ export default function MainPage1() {
             <Form>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>ŞEHİR</Form.Label>
-                <Form.Select aria-label="Default select example" onChange={(e) => setCity(e.target.value)} value={city}>
+                <Form.Select aria-label="Default select example" onChange={(e) => setCity(e.target.value.toUpperCase())} value={city}>
                   <option>Şehir seçiniz.</option>
-                  <option value="Ağrı">Ağrı</option>
-                  <option value="Ardahan">Ardahan</option>
-                  <option value="Iğdır">Iğdır</option>
-                  <option value="Kars">Kars</option>
+                  <option value="AĞRI">AĞRI</option>
+                  <option value="ARDAHAN">ARDAHAN</option>
+                  <option value="IĞDIR">IĞDIR</option>
+                  <option value="KARS">KARS</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group
@@ -410,14 +398,14 @@ export default function MainPage1() {
             <Form>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>ŞEHİR</Form.Label>
-                <Form.Select aria-label="Default select example" onChange={(e) => setCity(e.target.value)} value={city || ''}>
+                <Form.Select aria-label="Default select example" onChange={(e) => setCity(e.target.value.toUpperCase())} value={city || ''}>
                   <option disabled={!city} hidden={!city} value="">
                     {city || 'Şehir seçiniz.'}
                   </option>
-                  <option value="Ağrı">Ağrı</option>
-                  <option value="Ardahan">Ardahan</option>
-                  <option value="Iğdır">Iğdır</option>
-                  <option value="Kars">Kars</option>
+                  <option value="AĞRI">AĞRI</option>
+                  <option value="ARDAHAN">ARDAHAN</option>
+                  <option value="IĞDIR">IĞDIR</option>
+                  <option value="KARS">KARS</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group
