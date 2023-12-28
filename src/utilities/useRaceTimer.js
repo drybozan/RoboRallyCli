@@ -3,16 +3,20 @@
 import { useState, useEffect } from 'react';
 import RoboRallyServerService from '../services/RoboRallyServerService';
 
-const useRaceTimer = (numOfSections) => {
+const useRaceTimer = (competitors) => {
+
   const roboRallyServerService = new RoboRallyServerService();
   const [timers, setTimers] = useState([]);
 
   const initializeTimers = () => {
-    const initialTimers = Array(numOfSections).fill({
-      id: 0,
+    const initialTimers = competitors.map((competitor) => ({
+      id: competitor.id,
+      city: competitor.city,
+      name: competitor.name,
+      eliminated: competitor.eliminated,
       isRunning: false,
-      time: { minutes: 0, seconds: 0, milliseconds: 0 },
-    });
+      time: { minutes: 0, seconds: 0, milliseconds: 0 }
+    }));
     setTimers(initialTimers);
   };
 
@@ -23,47 +27,70 @@ const useRaceTimer = (numOfSections) => {
     return `${minutes}:${seconds}:${milliseconds}`;
   };
 
-  const startTimer = (id, index) => {
-    console.log("start timer id ", id)
-    console.log("start timer index ", index)
-    setTimers((prevTimers) => {
-      const updatedTimers = [...prevTimers];
-      updatedTimers[index] = {
-        ...updatedTimers[index],
-        isRunning: true,
-        id: id
-      };
+  const startTimer = (id) => {
+ 
+    console.log("gdddd");
 
-      //console.log("start updatedTimers ", formatTime(updatedTimers[0].time))
-      return updatedTimers;
-    });
+    console.log("Start timer for id: ", id);
+    const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
+    console.log("getCurrentDateTime : ", getCurrentDateTime );
+    roboRallyServerService.updateStartTimeById(id,getCurrentDateTime )
+      .then((result) => {
+        if (result.data.success === true) {
+          console.log(result.data.message);
+        } else {
+          console.log(result.data.message);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+
+    setTimers((prevTimers) =>
+      prevTimers.map((timer) =>
+        timer.id === id ? { ...timer, isRunning: true } : timer
+      )
+    );
+
+   
+
   };
 
-  const stopTimer = (id, index) => {
-    console.log("stop timer id ", id)
-    console.log("stop timer index ", index)
-    setTimers((prevTimers) => {
-      const updatedTimers = [...prevTimers];
-      updatedTimers[index] = {
-        ...updatedTimers[index],
-        isRunning: false,
-      };
-      return updatedTimers;
-    });
-  };
+  const stopTimer = (id) => {
+    setTimers((prevTimers) =>
+      prevTimers.map((timer) =>
+        timer.id === id ? { ...timer, isRunning: false } : timer
+      )
+    );
 
-  const getElapsedTime = (index) => {
-    return timers[index] ? timers[index].time : { minutes: 0, seconds: 0, milliseconds: 0 };
+    const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
+    roboRallyServerService
+      .updateDurationById(id,getCurrentDateTime )
+      .then((result) => {
+        if (result.data.success === true) {
+          console.log(result.data.message);
+        } else {
+          console.log(result.data.message);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
   };
 
   useEffect(() => {
     initializeTimers();
-  }, [numOfSections]);
+  }, [competitors.length]);
 
   useEffect(() => {
-    const intervalIds = timers.map((timer, index) => {
+    const intervalIds = [];
+
+
+    timers.forEach((timer, index) => {
       if (timer.isRunning) {
-        return setInterval(() => {
+        const intervalId = setInterval(() => {
           setTimers((prevTimers) => {
             const updatedTimers = [...prevTimers];
             const newMilliseconds = timer.time.milliseconds + 10;
@@ -87,48 +114,50 @@ const useRaceTimer = (numOfSections) => {
               };
             }
 
+            // if (timer.id !== 0) {
+            //   roboRallyServerService
+            //     .updateDurationById(timer.id, formatTime(timer.time))
+            //     .then((result) => {
+            //       if (result.data.success === true) {
+            //         console.log(result.data.message);
+            //       } else {
+            //         console.log(result.data.message);
+            //       }
+            //     })
+            //     .catch((e) => {
+            //       console.error(e);
+            //     });
+            //}
+
             return updatedTimers;
           });
         }, 10);
-      }
 
-      return null;
+        intervalIds.push(intervalId);
+      }
     });
 
-    timers.map((timer, index) => {
+    // Temizleme işlemi
+    return () => {
+      intervalIds.forEach((id) => clearInterval(id));
+    };
+  }, [timers]);
 
-      if(timer.id !== 0){
 
-      roboRallyServerService.updateDurationById(timer.id,formatTime(timer.time)).then(result => {
-  
-        //console.log("updateDurationById id :",timer.id)
-        //console.log(result)
-  
-        if (result.data.success === true) {
-          console.log(result.data.message)
-        } else {
-          //console.log(result.data.message)
-        }
-      }).catch(e => {
-        console.error(e);
-      })
-      }
+  // const getElapsedTime = (index) => {
+  //   return timers[index] ? timers[index].time : { minutes: 0, seconds: 0, milliseconds: 0 };
+  // };
 
-    });
-
-// Temizleme işlemi
-return () => {
-    intervalIds.forEach((id) => clearInterval(id));
+  const getElapsedTime = () => {
+    return timers;
   };
-}, [timers]);
 
+  return {
+    startTimer,
+    stopTimer,
+    getElapsedTime,
+  };
+};
 
-return {
-  timers,
-  startTimer,
-  stopTimer,
-  getElapsedTime,
-};
-};
 
 export default useRaceTimer;

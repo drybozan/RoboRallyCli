@@ -19,7 +19,7 @@ export default class RoboRallyServerService {
         })
     }
 
-    add(city,name,duration,isStart,eliminated) {
+    add(city,name,duration,startTime,stopTime,eliminated) {
 
         return axios({
             method: 'post',
@@ -27,21 +27,19 @@ export default class RoboRallyServerService {
             url: `http://${ipAdress}:${port}/DefCompetitorsController/add`,
             data: {
                 "city": city,
-                "name": name,
-                "duration":duration,
-                "start":isStart,
+                "name": name,               
                 "eliminated":eliminated
 
             }
         })
     }
 
-    getAllCompetitorsByDuration() {
+    getAllCompetitors() {
 
         return axios({
             method: 'get',
             maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/getAllByDuration`,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/getAllCompetitors`,
           
         })
     }
@@ -82,12 +80,23 @@ export default class RoboRallyServerService {
         })
     }
 
-    updateDurationById(id,duration) {
+    updateStartTimeById(id,startTime) {
 
         return axios({
             method: 'post',
             maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateDurationById?id=${id}&duration=${duration}`,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateStartTimeById?id=${id}&startTime=${startTime}`,
+          
+        })
+    }
+
+
+    updateStopTimeById(id,stopTime) {
+
+        return axios({
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateStopTimeById?id=${id}&stopTime=${stopTime}`,
           
         })
     }

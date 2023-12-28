@@ -45,24 +45,6 @@ export default function MainPage2() {
     }, []);
 
 
-    useEffect(() => {
-
-        roboRallyServerService.getAllCompetitorsByDuration().then(result => {
-            //   console.log("getAllCompetitorsByDuration")
-            //   console.log(result)
-
-            if (result.data.success === true) {
-                setCompetitors(result.data.data)
-            } else {
-                toast.error(result.data.message);
-
-            }
-        }).catch(e => {
-            console.error(e);
-        })
-
-
-    });
 
     async function previousPageClick() {
         navigate('/main')

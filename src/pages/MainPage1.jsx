@@ -5,7 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import RoboRallyServerService from '../services/RoboRallyServerService';
 import useRaceTimer from '../utilities/useRaceTimer';
-import useWebSocket from '../utilities/useWebSocket';
+//import useWebSocket from '../utilities/useWebSocket';
+//import WebSocketComponent from '../utilities/useWebSocket';
 
 
 
@@ -38,15 +39,6 @@ export default function MainPage1() {
 
   const [competitors, setCompetitors] = useState([]);
 
-  // WebSocket bağlantısı ve gelen verileri işleme
-  useWebSocket('/competitors', (data) => {
-    setCompetitors(data);
-  });
-
-  console.log("competitors")
-  console.log(competitors)
-
-
   useEffect(() => {
     // Function to update screen dimensions on resize
     //Bu fonksiyon, ekran boyutları güncellendiğinde çağrılacak ve setScreenWidth ve setScreenHeight ile yeni genişlik ve yüksekliği state'lere set edecektir.
@@ -64,8 +56,52 @@ export default function MainPage1() {
 
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await roboRallyServerService.getAllCompetitors();
+        if (result.data.success === true) {
+          setCompetitors(result.data.data);
+        } else {
+          toast.error(result.data.message);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    // İlk çalıştırmak için
+    fetchData();
+
+    // Her saniyede bir çalıştırmak için interval
+    const intervalId = setInterval(fetchData, 1000);
+
+    // Component unmount edildiğinde interval'i temizle
+    return () => clearInterval(intervalId);
+  }, []); // Boş dizi, sadece ilk render'da çalışmasını sağlar.
 
 
+  //   useEffect(() => {
+
+  //     roboRallyServerService.getAllCompetitorsByDuration().then(result => {
+  //         //   console.log("getAllCompetitorsByDuration")
+  //         //   console.log(result)
+
+  //         if (result.data.success === true) {
+  //             setCompetitors(result.data.data)
+  //         } else {
+  //             toast.error(result.data.message);
+
+  //         }
+  //     }).catch(e => {
+  //         console.error(e);
+  //     })
+
+
+  // });
+
+  // console.log("competiors:")
+  // console.log(competitors)
 
   async function nextPageClick() {
 
@@ -211,7 +247,7 @@ export default function MainPage1() {
       toast.warning("Lütfen yarışmacı ismini giriniz.");
 
     } else {
-      roboRallyServerService.add(city, name, formattedTime, isStart, isEliminated).then(result => {
+      roboRallyServerService.add(city, name, isEliminated).then(result => {
 
         if (result.data.success === true) {
           toast.success(result.data.message);
@@ -234,8 +270,34 @@ export default function MainPage1() {
 
 
   const numOfSections = competitors.length; // Kaç parça olacağını belirt
-  const { timers, startTimer, stopTimer, getElapsedTime } = useRaceTimer(numOfSections);
+  const { startTimer, stopTimer, getElapsedTime } = useRaceTimer(competitors);
 
+
+  // Süreye göre sıralama
+  const sortedData = getElapsedTime().sort((a, b) => {
+    const timeA = a.time.minutes * 60 + a.time.seconds + a.time.milliseconds / 1000;
+    const timeB = b.time.minutes * 60 + b.time.seconds + b.time.milliseconds / 1000;
+
+    // Süresi 0 olanları en sonda bırak
+    if (timeA === 0 && timeB !== 0) {
+      return 1;
+    } else if (timeA !== 0 && timeB === 0) {
+      return -1;
+    }
+
+    // Süreleri küçükten büyüğe sırala
+    return timeA - timeB;
+  });
+
+
+
+
+  const formatTime = (time) => {
+    const minutes = time.minutes.toString().padStart(2, '0');
+    const seconds = time.seconds.toString().padStart(2, '0');
+    const milliseconds = time.milliseconds.toString().padStart(3, '0');
+    return `${minutes}:${seconds}:${milliseconds}`;
+  };
 
 
   // Helper function to get gradient colors based on index
@@ -256,7 +318,7 @@ export default function MainPage1() {
     return medalIcons[index] || `${index + 1}.png`;
   };
 
-  const sections = competitors.slice(0, 10).map((competitor, index) => {
+  const sections = sortedData.slice(0, 10).map((competitor, index) => {
 
     // index numarasına göre div boya koyudan açık renge doğru
     const gradientColors = getGradientColors(index);
@@ -289,15 +351,17 @@ export default function MainPage1() {
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
         <div style={{ flex: "3", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
+          {/* {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration} */}
 
-          {/* <div>{formatTime(getElapsedTime(index))}</div> */}
+          {/* <div>{getElapsedTime()}</div> */}
+
+          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : formatTime(competitor.time)}
 
         </div>
 
         <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-          {/* <Button onClick={() => startTimer(competitor.id, index)} >Start</Button>
-          <Button onClick={() => stopTimer(competitor.id, index)} >Stop</Button> */}
+          <Button onClick={() => startTimer(competitor.id)} >Start</Button>
+          <Button onClick={() => stopTimer(competitor.id)} >Stop</Button>
           <div onClick={() => handleIconUpdateClick(competitor.id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
             <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
           </div>
@@ -343,6 +407,8 @@ export default function MainPage1() {
 
         {/* tablonun gövdesi */}
         {sections}
+
+        {/* <WebSocketComponent /> */}
 
       </div>
 
