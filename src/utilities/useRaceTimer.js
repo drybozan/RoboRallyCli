@@ -1,9 +1,10 @@
 // useRaceTimer.js
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import RoboRallyServerService from '../services/RoboRallyServerService';
 
 const useRaceTimer = (competitors) => {
+
 
   const roboRallyServerService = new RoboRallyServerService();
   const [timers, setTimers] = useState([]);
@@ -20,31 +21,14 @@ const useRaceTimer = (competitors) => {
     setTimers(initialTimers);
   };
 
-  const formatTime = (time) => {
-    const minutes = time.minutes.toString().padStart(2, '0');
-    const seconds = time.seconds.toString().padStart(2, '0');
-    const milliseconds = time.milliseconds.toString().padStart(3, '0');
-    return `${minutes}:${seconds}:${milliseconds}`;
-  };
+  useEffect(() => {
+    initializeTimers();
+  }, [competitors.length]);
+
 
   const startTimer = (id) => {
- 
-    console.log("gdddd");
 
     console.log("Start timer for id: ", id);
-    const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
-    console.log("getCurrentDateTime : ", getCurrentDateTime );
-    roboRallyServerService.updateStartTimeById(id,getCurrentDateTime )
-      .then((result) => {
-        if (result.data.success === true) {
-          console.log(result.data.message);
-        } else {
-          console.log(result.data.message);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      });
 
 
     setTimers((prevTimers) =>
@@ -53,20 +37,9 @@ const useRaceTimer = (competitors) => {
       )
     );
 
-   
-
-  };
-
-  const stopTimer = (id) => {
-    setTimers((prevTimers) =>
-      prevTimers.map((timer) =>
-        timer.id === id ? { ...timer, isRunning: false } : timer
-      )
-    );
-
     const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
-    roboRallyServerService
-      .updateDurationById(id,getCurrentDateTime )
+    console.log("getCurrentDateTime : ", getCurrentDateTime());
+    roboRallyServerService.updateStartTimeById(id, getCurrentDateTime())
       .then((result) => {
         if (result.data.success === true) {
           console.log(result.data.message);
@@ -80,9 +53,34 @@ const useRaceTimer = (competitors) => {
 
   };
 
-  useEffect(() => {
-    initializeTimers();
-  }, [competitors.length]);
+  const stopTimer = (id) => {
+
+    console.log("Stop timer for id: ", id);
+
+    setTimers((prevTimers) =>
+      prevTimers.map((timer) =>
+        timer.id === id ? { ...timer, isRunning: false } : timer
+      )
+    );
+
+    const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
+    console.log("getCurrentDateTime : ", getCurrentDateTime());
+
+    roboRallyServerService.updateStopTimeById(id, getCurrentDateTime())
+      .then((result) => {
+        if (result.data.success === true) {
+          console.log(result.data.message);
+        } else {
+          console.log(result.data.message);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+  };
+
+
 
   useEffect(() => {
     const intervalIds = [];
@@ -91,6 +89,7 @@ const useRaceTimer = (competitors) => {
     timers.forEach((timer, index) => {
       if (timer.isRunning) {
         const intervalId = setInterval(() => {
+
           setTimers((prevTimers) => {
             const updatedTimers = [...prevTimers];
             const newMilliseconds = timer.time.milliseconds + 10;
@@ -114,21 +113,6 @@ const useRaceTimer = (competitors) => {
               };
             }
 
-            // if (timer.id !== 0) {
-            //   roboRallyServerService
-            //     .updateDurationById(timer.id, formatTime(timer.time))
-            //     .then((result) => {
-            //       if (result.data.success === true) {
-            //         console.log(result.data.message);
-            //       } else {
-            //         console.log(result.data.message);
-            //       }
-            //     })
-            //     .catch((e) => {
-            //       console.error(e);
-            //     });
-            //}
-
             return updatedTimers;
           });
         }, 10);
@@ -144,18 +128,21 @@ const useRaceTimer = (competitors) => {
   }, [timers]);
 
 
-  // const getElapsedTime = (index) => {
+
+
+  // const getElapsedTime2 = (index) => {
   //   return timers[index] ? timers[index].time : { minutes: 0, seconds: 0, milliseconds: 0 };
   // };
 
-  const getElapsedTime = () => {
+  const getElapsedTime =  () => {
     return timers;
   };
 
   return {
     startTimer,
     stopTimer,
-    getElapsedTime,
+    getElapsedTime
+
   };
 };
 
