@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const ipAdress = "192.168.80.103"
+const ipAdress = "192.168.80.71"
 const port = "8080"
 
 export default class RoboRallyServerService {
@@ -40,6 +40,17 @@ export default class RoboRallyServerService {
             method: 'get',
             maxBodyLength: Infinity,
             url: `http://${ipAdress}:${port}/DefCompetitorsController/getAllCompetitors`,
+          
+        })
+    }
+
+
+    getAllCompetitorsByDuration() {
+
+        return axios({
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/getAllCompetitorsByDuration`,
           
         })
     }
@@ -100,5 +111,16 @@ export default class RoboRallyServerService {
           
         })
     }
+
+    updateDurationById(id,duration) {
+
+        return axios({
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateDurationById?id=${id}&duration=${duration}`,
+          
+        })
+    }
+
 
 }
