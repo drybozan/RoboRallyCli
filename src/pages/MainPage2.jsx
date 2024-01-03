@@ -146,8 +146,6 @@ export default function MainPage2() {
         console.log("name")
         console.log(name)
 
-        console.log("isEliminated")
-        console.log(isEliminated)
 
         if (city === "") {
 
@@ -203,11 +201,18 @@ export default function MainPage2() {
         })
     }
 
+    const getCurrentDateTime = () => {
+        const now = new Date();
+        const formattedDate = now.toLocaleString('tr-TR', { year: 'numeric', month: '2-digit', day: '2-digit', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const milliseconds = `${now.getMilliseconds()}`.padStart(3, '0');
+        return `${formattedDate}:${milliseconds}`;
+    };
+
     const startTimer = (id) => {
 
-        console.log("Start timer for id: ", id);
-    
-        const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
+        console.log("Start timer for id: ", id);   
+      
+
         console.log("getCurrentDateTime : ", getCurrentDateTime());
         roboRallyServerService.updateStartTimeById(id, getCurrentDateTime())
           .then((result) => {
@@ -226,8 +231,7 @@ export default function MainPage2() {
       const stopTimer = (id) => {
     
         console.log("Stop timer for id: ", id);
-    
-        const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
+
         console.log("getCurrentDateTime : ", getCurrentDateTime());
     
         roboRallyServerService.updateStopTimeById(id, getCurrentDateTime())

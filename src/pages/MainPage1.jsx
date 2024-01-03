@@ -197,9 +197,6 @@ export default function MainPage1() {
     console.log("name")
     console.log(name)
 
-    console.log("formattedTime")
-    console.log(formattedTime)
-
     if (city === "") {
 
       toast.warning("Lütfen şehir bilgisini giriniz.");
@@ -209,7 +206,7 @@ export default function MainPage1() {
       toast.warning("Lütfen yarışmacı ismini giriniz.");
 
     } else {
-      roboRallyServerService.add(city, name,"0:00:000", isEliminated).then(result => {
+      roboRallyServerService.add(city, name, "00:00:000", isEliminated).then(result => {
 
         if (result.data.success === true) {
           toast.success(result.data.message);
@@ -230,11 +227,17 @@ export default function MainPage1() {
     }
   }
 
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const formattedDate = now.toLocaleString('tr-TR', { year: 'numeric', month: '2-digit', day: '2-digit', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const milliseconds = `${now.getMilliseconds()}`.padStart(3, '0');
+    return `${formattedDate}:${milliseconds}`;
+  };
+
   const startTimer = (id) => {
 
     console.log("Start timer for id: ", id);
 
-    const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
     console.log("getCurrentDateTime : ", getCurrentDateTime());
     roboRallyServerService.updateStartTimeById(id, getCurrentDateTime())
       .then((result) => {
@@ -254,7 +257,6 @@ export default function MainPage1() {
 
     console.log("Stop timer for id: ", id);
 
-    const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
     console.log("getCurrentDateTime : ", getCurrentDateTime());
 
     roboRallyServerService.updateStopTimeById(id, getCurrentDateTime())
@@ -459,6 +461,32 @@ export default function MainPage1() {
                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
                 <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
               </Form.Group>
+              <Form.Control
+                style={{ width: '200px'}} // Genişlik ayarlayın
+                type="text"
+                placeholder="Disabled input"
+                aria-label="Disabled input example"
+                disabled
+                readOnly
+              />
+              <br />
+              <Form.Control
+                type="text"
+                placeholder="Disabled input"
+                aria-label="Disabled input example"
+                disabled
+                readOnly
+              />
+              <br />
+              <Form.Control
+                type="text"
+                placeholder="Disabled input"
+                aria-label="Disabled input example"
+                disabled
+                readOnly
+              />
+              <br />
+            
 
               <Form.Check // prettier-ignore
                 type="switch"
