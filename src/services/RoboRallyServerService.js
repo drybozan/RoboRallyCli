@@ -28,7 +28,8 @@ export default class RoboRallyServerService {
             data: {
                 "city": city,
                 "name": name,               
-                "eliminated":eliminated
+                "eliminated":eliminated,
+                "duration":duration
 
             }
         })

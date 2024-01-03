@@ -4,7 +4,7 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import RoboRallyServerService from '../services/RoboRallyServerService';
-import useRaceTimer from '../utilities/useRaceTimer';
+
 
 export default function MainPage1() {
 
@@ -20,12 +20,6 @@ export default function MainPage1() {
 
   //yarismacı guncelleme modalı için
   const [showUpdate, setShowUpdate] = useState(false);
-
-
-  // timer icin
-  const [time, setTime] = useState({ minutes: 0, seconds: 0, milliseconds: 0 });
-  const formattedTime = `${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}:${String(time.milliseconds).padStart(3, '0')}`;
-
 
   const [id, setId] = useState(0);
   const [city, setCity] = useState("");
@@ -51,53 +45,25 @@ export default function MainPage1() {
 
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const result = await roboRallyServerService.getAllCompetitors();
-  //       if (result.data.success === true) {
-  //         setCompetitors(result.data.data);
-  //       } else {
-  //         toast.error(result.data.message);
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   };
 
-  //   // İlk çalıştırmak için
-  //   fetchData();
-
-  //   // Her saniyede bir çalıştırmak için interval
-  //   const intervalId = setInterval(fetchData, 1000);
-
-  //   // Component unmount edildiğinde interval'i temizle
-  //   return () => clearInterval(intervalId);
-  // }, []); // Boş dizi, sadece ilk render'da çalışmasını sağlar.
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await roboRallyServerService.getAllCompetitorsByDuration();
-        if (result.data.success === true) {
-          setCompetitors(result.data.data);
-        } else {
-          toast.error(result.data.message);
-        }
-      } catch (e) {
-        console.error(e);
+
+    roboRallyServerService.getAllCompetitorsByDuration().then(result => {
+
+
+      if (result.data.success === true) {
+
+        setCompetitors(result.data.data);
+      } else {
+        toast.error(result.data.message);
+
+
       }
-    };
 
-    // İlk çalıştırmak için
-    fetchData();
+    })
+  })
 
-  }); // Boş dizi, sadece ilk render'da çalışmasını sağlar.
-
-
-  // timer oluştur her yarışmacı için
-  const { startTimer, stopTimer, getElapsedTime } = useRaceTimer(competitors);
-  
 
   async function nextPageClick() {
 
@@ -243,7 +209,7 @@ export default function MainPage1() {
       toast.warning("Lütfen yarışmacı ismini giriniz.");
 
     } else {
-      roboRallyServerService.add(city, name, isEliminated).then(result => {
+      roboRallyServerService.add(city, name,"0:00:000", isEliminated).then(result => {
 
         if (result.data.success === true) {
           toast.success(result.data.message);
@@ -258,14 +224,56 @@ export default function MainPage1() {
         handleShowAddClose();
         setCity("")
         setName("")
-        
+
       });
 
     }
   }
 
+  const startTimer = (id) => {
 
- 
+    console.log("Start timer for id: ", id);
+
+    const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
+    console.log("getCurrentDateTime : ", getCurrentDateTime());
+    roboRallyServerService.updateStartTimeById(id, getCurrentDateTime())
+      .then((result) => {
+        if (result.data.success === true) {
+          console.log(result.data.message);
+        } else {
+          console.log(result.data.message);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+  };
+
+  const stopTimer = (id) => {
+
+    console.log("Stop timer for id: ", id);
+
+    const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
+    console.log("getCurrentDateTime : ", getCurrentDateTime());
+
+    roboRallyServerService.updateStopTimeById(id, getCurrentDateTime())
+      .then((result) => {
+        if (result.data.success === true) {
+          console.log(result.data.message);
+        } else {
+          console.log(result.data.message);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+  };
+
+
+
+
 
 
   // Helper function to get gradient colors based on index
@@ -317,13 +325,13 @@ export default function MainPage1() {
 
         {/* yarısmacı bilgileri*/}
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
-        <div style={{ flex: "3", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}    
+        <div style={{ flex: "3", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}
         </div>
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
-          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration} 
+          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
 
-       
+
 
           {/*competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : formatTime(competitor.time)*/}
 

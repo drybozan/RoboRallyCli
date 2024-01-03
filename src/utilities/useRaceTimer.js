@@ -151,26 +151,7 @@ const useRaceTimer = (competitors) => {
       }
     });
     
-    timers.map((timer, index) => {
-
-      if(timer.id !== 0 &&  formatTime(timer.time) !== "00:00:000"){
-
-      roboRallyServerService.updateDurationById(timer.id,formatTime(timer.time)).then(result => {
-  
-        //console.log("updateDurationById id :",timer.id)
-        //console.log(result)
-  
-        if (result.data.success === true) {
-          console.log(result.data.message)
-        } else {
-          //console.log(result.data.message)
-        }
-      }).catch(e => {
-        console.error(e);
-      })
-      }
-
-    });
+    
 
 
     // Temizleme işlemi

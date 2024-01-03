@@ -22,7 +22,7 @@ export default function MainPage2() {
     const [competitors, setCompetitors] = useState([]);
     const [id, setId] = useState(0);
     const [city, setCity] = useState("");
-    const [name, setName] = useState("");   
+    const [name, setName] = useState("");
     const [isEliminated, setEliminated] = useState(false);
 
 
@@ -44,100 +44,47 @@ export default function MainPage2() {
     }, []);
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await roboRallyServerService.getAllCompetitors();
-        if (result.data.success === true) {
-          setCompetitors(result.data.data);
-        } else {
-          toast.error(result.data.message);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
+    useEffect(() => {
 
-    // İlk çalıştırmak için
-    fetchData();
-
-    // Her saniyede bir çalıştırmak için interval
-    const intervalId = setInterval(fetchData, 1000);
-
-    // Component unmount edildiğinde interval'i temizle
-    return () => clearInterval(intervalId);
-  }, []); // Boş dizi, sadece ilk render'da çalışmasını sağlar.
-
-  const formatTime = (time) => {
-    const minutes = time.minutes.toString().padStart(2, '0');
-    const seconds = time.seconds.toString().padStart(2, '0');
-    const milliseconds = time.milliseconds.toString().padStart(3, '0');
-    return `${minutes}:${seconds}:${milliseconds}`;
-  };
-
-  // timer oluştur her yarışmacı için
-  const { startTimer, stopTimer, getElapsedTime } = useRaceTimer(competitors);
-  const [sortedData, setSortedData] = useState([]);
-
-   // her yarısmacının bilgi ve timer değerini al
-  const dataFromTimer = getElapsedTime();
-
-  //eger yarismaci elendiyse timer icindeki yarismaciyi de ele. Yarimaci elendiginde timer degeri 0 set ediliyor ki sıralama da en arkaya dussun diye
-  useEffect(() => {
-
-    // competitors içinde eliminated alanı true olanları bul
-    const eliminatedCompetitors = competitors.filter((competitor) => competitor.eliminated === true);
-
-    // timers içinde aynı id'ye sahip olanların eliminated alanını güncelle
-    const updatedSortedData = dataFromTimer.map((data) => {
-      const eliminatedCompetitor = eliminatedCompetitors.find((competitor) => competitor.id === data.id);
-      if (eliminatedCompetitor) {
-        return {
-          ...data,
-          eliminated: true,
-          time: {
-            minutes: 0,
-            seconds: 0,
-            milliseconds: 0
-          }
-        };
-      } else {
-        return {
-          ...data,
-          eliminated: false
-          // Burada `time`'ı değiştirmeye gerek yok, çünkü `eliminated` false durumunda zaman değerlerini koru
-        };
-      }
-    });
-
-   
-    setSortedData(updatedSortedData);
-
-  }, [competitors]);
+        roboRallyServerService.getAllCompetitorsByDuration().then(result => {
 
 
-  // Süreye göre sıralama
-  const updatedCompetitors = sortedData.sort((a, b) => {
-    const timeA = a.time.minutes * 60 + a.time.seconds + a.time.milliseconds / 1000;
-    const timeB = b.time.minutes * 60 + b.time.seconds + b.time.milliseconds / 1000;
+            if (result.data.success === true) {
 
-    // Süresi 0 olanları en sonda bırak
-    if (timeA === 0 && timeB !== 0) {
-      return 1;
-    } else if (timeA !== 0 && timeB === 0) {
-      return -1;
-    }
-
-    // Süreleri küçükten büyüğe sırala
-    return timeA - timeB;
-  });
-
-  // console.log("updatedCompetitors")
-  // console.log(updatedCompetitors)
+                setCompetitors(result.data.data);
+            } else {
+                toast.error(result.data.message);
 
 
-  console.log("dataFromTimer")
-  console.log(dataFromTimer)
+            }
+
+        })
+    })
+
+
+    //   useEffect(() => {
+    //     const fetchData = async () => {
+    //       try {
+    //         const result = await roboRallyServerService.getAllCompetitors();
+    //         if (result.data.success === true) {
+    //           setCompetitors(result.data.data);
+    //         } else {
+    //           toast.error(result.data.message);
+    //         }
+    //       } catch (e) {
+    //         console.error(e);
+    //       }
+    //     };
+
+    //     // İlk çalıştırmak için
+    //     fetchData();
+
+    //     // Her saniyede bir çalıştırmak için interval
+    //     const intervalId = setInterval(fetchData, 1000);
+
+    //     // Component unmount edildiğinde interval'i temizle
+    //     return () => clearInterval(intervalId);
+    //   }, []); // Boş dizi, sadece ilk render'da çalışmasını sağlar.
 
 
 
@@ -256,10 +203,52 @@ export default function MainPage2() {
         })
     }
 
+    const startTimer = (id) => {
+
+        console.log("Start timer for id: ", id);
+    
+        const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
+        console.log("getCurrentDateTime : ", getCurrentDateTime());
+        roboRallyServerService.updateStartTimeById(id, getCurrentDateTime())
+          .then((result) => {
+            if (result.data.success === true) {
+              console.log(result.data.message);
+            } else {
+              console.log(result.data.message);
+            }
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+    
+      };
+    
+      const stopTimer = (id) => {
+    
+        console.log("Stop timer for id: ", id);
+    
+        const getCurrentDateTime = () => new Date().toLocaleString('tr-TR');
+        console.log("getCurrentDateTime : ", getCurrentDateTime());
+    
+        roboRallyServerService.updateStopTimeById(id, getCurrentDateTime())
+          .then((result) => {
+            if (result.data.success === true) {
+              console.log(result.data.message);
+            } else {
+              console.log(result.data.message);
+            }
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+    
+      };
+    
 
 
 
-    const sections = updatedCompetitors.slice(10, 20).map((competitor, index) => {
+
+    const sections = competitors.slice(10, 20).map((competitor, index) => {
         const adjustedIndex = index + 10;
 
         return (
@@ -284,11 +273,11 @@ export default function MainPage2() {
 
                 {/* yarısmacı bilgileri*/}
                 <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
-                <div style={{ flex: "3",fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
+                <div style={{ flex: "3", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
                 <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
-                    {/* {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration} */}
+                    {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration} 
 
-                    {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : formatTime(competitor.time)}
+                    {/* {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : formatTime(competitor.time)} */}
                 </div>
 
                 <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
