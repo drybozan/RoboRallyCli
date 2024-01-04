@@ -25,6 +25,9 @@ export default function MainPage1() {
   const [city, setCity] = useState("");
   const [name, setName] = useState("");
   const [isEliminated, setEliminated] = useState(false);
+  const [start, setStart] = useState("");
+  const [stop, setStop] = useState("");
+  const [duration, setDuration] = useState("");
 
   const [competitors, setCompetitors] = useState([]);
 
@@ -91,6 +94,9 @@ export default function MainPage1() {
     setCity("")
     setName("")
     setEliminated(false)
+    setStart("")
+    setStop("")
+    setDuration("")
     setShowUpdate(false)
   };
 
@@ -110,6 +116,9 @@ export default function MainPage1() {
         setCity(result.data.data.city.toUpperCase())
         setName(result.data.data.name)
         setEliminated(result.data.data.eliminated)
+        setStart(result.data.data.startTime)
+        setStop(result.data.data.stopTime)
+        setDuration(result.data.data.duration)
       } else {
         toast.error(result.data.message);
 
@@ -164,6 +173,9 @@ export default function MainPage1() {
         setCity("")
         setName("")
         setEliminated(false)
+        setStart("")
+        setStop("")
+        setDuration("")
 
       });
 
@@ -313,7 +325,7 @@ export default function MainPage1() {
           <div style={{ width: "60%", height: "100%", borderRadius: "50%" }}>
 
             {index < 3 && (
-              <img src={`${process.env.PUBLIC_URL}/${medalIcon}`} alt={`Icon ${index + 1}`} width="100" height="100" style={{ alignSelf: 'flex-start', marginLeft: '-20px' }} />
+              <img src={`${process.env.PUBLIC_URL}/${medalIcon}`} alt={`Icon ${index + 1}`} width="110" height="110" style={{ alignSelf: 'flex-start', marginLeft: '-26px' }} />
             )}
 
             {index !== 0 && index !== 1 && index !== 2 && (
@@ -461,33 +473,43 @@ export default function MainPage1() {
                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
                 <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
               </Form.Group>
-              <Form.Control
-                style={{ width: '200px'}} // Genişlik ayarlayın
-                type="text"
-                placeholder="Disabled input"
-                aria-label="Disabled input example"
-                disabled
-                readOnly
-              />
-              <br />
-              <Form.Control
-                type="text"
-                placeholder="Disabled input"
-                aria-label="Disabled input example"
-                disabled
-                readOnly
-              />
-              <br />
-              <Form.Control
-                type="text"
-                placeholder="Disabled input"
-                aria-label="Disabled input example"
-                disabled
-                readOnly
-              />
-              <br />
-            
+              <div style={{  display: 'flex', alignItems: 'center'}}>
+                <Form.Label>Başlangıç : </Form.Label>
+                <Form.Control
+                  style={{ width: '12vw',height:"3.5vh", marginLeft: "10px" }} // Genişlik ayarlayın
+                  type="text"
+                  placeholder={start}
+                  aria-label="Disabled input example"
+                  disabled
+                  readOnly
+                />
+              </div>
 
+              <br />
+              <div style={{  display: 'flex', alignItems: 'center'}}>
+                <Form.Label>Bitiş : </Form.Label>
+                <Form.Control
+                  style={{ width: '12vw',height:"3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
+                  type="text"
+                  placeholder={stop}
+                  aria-label="Disabled input example"
+                  disabled
+                  readOnly
+                />
+              </div>
+              <br />
+              <div style={{  display: 'flex', alignItems: 'center'}}>
+                <Form.Label>Süre : </Form.Label>
+                <Form.Control
+                  style={{ width: '10vw',height:"3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
+                  type="text"
+                  placeholder={duration}
+                  aria-label="Disabled input example"
+                  disabled
+                  readOnly
+                />
+              </div>
+              <br />
               <Form.Check // prettier-ignore
                 type="switch"
                 id="custom-switch"

@@ -19,7 +19,7 @@ export default class RoboRallyServerService {
         })
     }
 
-    add(city,name,duration,startTime,stopTime,eliminated) {
+    add(city,name,duration,eliminated) {
 
         return axios({
             method: 'post',

@@ -24,6 +24,9 @@ export default function MainPage2() {
     const [city, setCity] = useState("");
     const [name, setName] = useState("");
     const [isEliminated, setEliminated] = useState(false);
+    const [start, setStart] = useState("");
+    const [stop, setStop] = useState("");
+    const [duration, setDuration] = useState("");
 
 
     useEffect(() => {
@@ -105,6 +108,9 @@ export default function MainPage2() {
         setCity("")
         setName("")
         setEliminated(false)
+        setStart("")
+        setStop("")
+        setDuration("")
         setShowUpdate(false)
     };
 
@@ -124,6 +130,9 @@ export default function MainPage2() {
                 setCity(result.data.data.city.toUpperCase())
                 setName(result.data.data.name)
                 setEliminated(result.data.data.eliminated)
+                setStart(result.data.data.startTime)
+                setStop(result.data.data.stopTime)
+                setDuration(result.data.data.duration)
             } else {
                 toast.error(result.data.message);
 
@@ -176,6 +185,9 @@ export default function MainPage2() {
                 setCity("")
                 setName("")
                 setEliminated(false)
+                setStart("")
+                setStop("")
+                setDuration("")
 
             });
 
@@ -368,6 +380,44 @@ export default function MainPage2() {
                                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
                                 <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
                             </Form.Group>
+
+                            <div style={{  display: 'flex', alignItems: 'center'}}>
+                <Form.Label>Başlangıç : </Form.Label>
+                <Form.Control
+                  style={{ width: '12vw',height:"3.5vh", marginLeft: "10px" }} // Genişlik ayarlayın
+                  type="text"
+                  placeholder={start}
+                  aria-label="Disabled input example"
+                  disabled
+                  readOnly
+                />
+              </div>
+
+              <br />
+              <div style={{  display: 'flex', alignItems: 'center'}}>
+                <Form.Label>Bitiş : </Form.Label>
+                <Form.Control
+                  style={{ width: '12vw',height:"3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
+                  type="text"
+                  placeholder={stop}
+                  aria-label="Disabled input example"
+                  disabled
+                  readOnly
+                />
+              </div>
+              <br />
+              <div style={{  display: 'flex', alignItems: 'center'}}>
+                <Form.Label>Süre : </Form.Label>
+                <Form.Control
+                  style={{ width: '10vw',height:"3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
+                  type="text"
+                  placeholder={duration}
+                  aria-label="Disabled input example"
+                  disabled
+                  readOnly
+                />
+              </div>
+              <br />
 
                             <Form.Check // prettier-ignore
                                 type="switch"

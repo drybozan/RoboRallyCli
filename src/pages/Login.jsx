@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopyright } from '@fortawesome/free-solid-svg-icons';
+
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import RoboRallyServerService from '../services/RoboRallyServerService';
@@ -35,11 +34,11 @@ export default function Login() {
         return () => window.removeEventListener('resize', updateDimensions);
     }, []);
 
-  
+
     async function OnClickLogin() {
 
         if (username === "" || password === "") {
-           
+
             toast.error("Kullanıcı adı  veya şifre alanı boş olamaz.");
         } else {
 
@@ -65,32 +64,48 @@ export default function Login() {
     }
 
     return (
-        <div style={{ width: screenWidth, height: screenHeight, backgroundImage: 'url(/loginBG2.jpg)', backgroundSize: 'cover', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ width: screenWidth, height: screenHeight, backgroundImage: 'url(/loginBG.png)', backgroundSize: 'cover', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
 
-            <div style={{ padding: '20px', background: 'white', width: '30%', height: '50%', borderRadius: '5%', opacity: '0.7', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ width: '45%', height: "80%" , marginRight:"13vw"}} >
 
-                <img src="/sunnyTeknolojiLogo.png" alt="sunnyTeknolojiLogo" style={{ width: '50%', height: '8vh', marginTop: '10vh', background: 'white' }} />
+                <img src="/loginSunny.png" alt="sunnyTeknolojiLogo" style={{ width: '100%', height: "100%" }} />
 
-                <Form style={{ width: '50%', marginTop: '5vh' }}>
-                    <Form.Group>
-                        <Form.Control style={{ marginBottom: '3vh', border: '1px solid #FF7F00' }}
+
+            </div>
+            <div style={{ padding: '20px', background: 'white', width: '23%', height: '55%', borderRadius: '7%', 
+            display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', boxShadow: '-12px -12px 3px 2px rgba(230, 230, 230, 0.5)' }}>
+
+                <div style={{ width: '20%', height: "18%", marginLeft: "75%" }}>
+                    <img src="/yildiz.png" alt="sunnyTeknolojiLogo" style={{ width: '100%', height: "100%" }} />
+                </div>
+
+                <div style={{ width: '70%', height: "15%" }}>
+                    <img src="/merhaba.png" alt="sunnyTeknolojiLogo" style={{ width: '100%', height: "100%" }} />
+                </div>
+
+                <Form style={{ width: '100%', marginTop: '5vh',marginBottom: '3vh' }}>
+
+                    <Form.Group  >
+                    <Form.Label style={{ marginRight: '15vw' }}>Kullanıcı Adı</Form.Label>
+                        <Form.Control style={{ marginBottom: '3vh',height:"5vh" }}
                             onChange={(e) => setUsername(e.target.value)}
-                            placeholder="username"
+                            placeholder="Kullanıcı adı"
                             value={username}
                         />
 
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Control style={{ marginBottom: '3vh', border: '1px solid #FF7F00' }}
+                    <Form.Label style={{ marginRight: '18vw' }}>Şifre</Form.Label>
+                        <Form.Control style={{ marginBottom: '3vh',height:"5vh"  }}
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"
-                            placeholder="password"
+                            placeholder="şifre"
                             value={password}
                         />
                     </Form.Group>
                 </Form>
-                <Button style={{ width: '40%', color: 'white', border: '1px solid #FF7F00', background: isHovered ? '#F7BE11' : '#F77F11', }}
+                <Button style={{ width: '90%', height:"10%", color: 'white', border: '1px solid #000000', background: isHovered ? '#000D33' : '#000000', marginLeft: "5%"  }}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={OnClickLogin}
@@ -101,9 +116,6 @@ export default function Login() {
             </div>
 
 
-            <div style={{ position: 'fixed', bottom: '1%', left: '1%', color: 'black' }}>
-                <FontAwesomeIcon icon={faCopyright} style={{ fontSize: '140%' }} /> <span style={{ marginLeft: '5px' }}>2023  Developed By Derya Bozan</span>
-            </div>
 
         </div>
 
