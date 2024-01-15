@@ -86,21 +86,19 @@ export default function Login() {
                 <Form style={{ width: '100%', marginTop: '5vh',marginBottom: '3vh' }}>
 
                     <Form.Group  >
-                    <Form.Label style={{ marginRight: '15vw' }}>Kullanıcı Adı</Form.Label>
+                    <Form.Label style={{ marginRight: '16vw' }}>Kullanıcı Adı</Form.Label>
                         <Form.Control style={{ marginBottom: '3vh',height:"5vh" }}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Kullanıcı adı"
+                            onChange={(e) => setUsername(e.target.value)}                           
                             value={username}
                         />
 
                     </Form.Group>
 
                     <Form.Group>
-                    <Form.Label style={{ marginRight: '18vw' }}>Şifre</Form.Label>
+                    <Form.Label style={{ marginRight: '19vw' }}>Şifre</Form.Label>
                         <Form.Control style={{ marginBottom: '3vh',height:"5vh"  }}
                             onChange={(e) => setPassword(e.target.value)}
-                            type="password"
-                            placeholder="şifre"
+                            type="password"                            
                             value={password}
                         />
                     </Form.Group>
