@@ -4,6 +4,8 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import RoboRallyServerService from '../services/RoboRallyServerService';
+import '../style.css';  // styles.css dosyasını içe aktarın
+
 
 
 export default function MainPage1() {
@@ -39,6 +41,8 @@ export default function MainPage1() {
       setScreenHeight(window.innerHeight);
     };
 
+    console.log("screenWidth : " + screenWidth)
+    console.log("screenHeight : " + screenHeight)
     // Event listener to handle resize
     // tarayıcı penceresinin boyutu değiştiğinde çağrılacak olan updateDimensions fonksiyonu bir event listener'a eklenir.
     window.addEventListener('resize', updateDimensions);
@@ -50,22 +54,46 @@ export default function MainPage1() {
 
 
 
+  // useEffect(() => {
+
+  //   roboRallyServerService.getAllCompetitorsByDuration().then(result => {
+
+
+  //     if (result.data.success === true) {
+
+  //       setCompetitors(result.data.data);
+  //     } else {
+  //       toast.error(result.data.message);
+
+
+  //     }
+
+  //   })
+  // })
+
   useEffect(() => {
-
-    roboRallyServerService.getAllCompetitorsByDuration().then(result => {
-
-
-      if (result.data.success === true) {
-
-        setCompetitors(result.data.data);
-      } else {
-        toast.error(result.data.message);
-
-
+    const fetchData = async () => {
+      try {
+        const result = await roboRallyServerService.getAllCompetitorsByDuration();
+        if (result.data.success === true) {
+          setCompetitors(result.data.data);
+        } else {
+          toast.error(result.data.message);
+        }
+      } catch (e) {
+        console.error(e);
       }
+    };
 
-    })
-  })
+    // İlk çalıştırmak için
+    fetchData();
+
+    // Her saniyede bir çalıştırmak için interval
+    const intervalId = setInterval(fetchData, 1000);
+
+    // Component unmount edildiğinde interval'i temizle
+    return () => clearInterval(intervalId);
+  }, []); // Boş dizi, sadece ilk render'da çalışmasını sağlar.
 
 
   async function nextPageClick() {
@@ -285,8 +313,86 @@ export default function MainPage1() {
 
   };
 
+  const getReadyCode = () => {
+
+    //robota ready sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
+    const robotCodes = ["11", "22", "33", "44"];
+
+    // Her robot kodu için bir API isteği oluştur
+    robotCodes.forEach((robotCode) => {
+      roboRallyServerService.updateReadyByCode(robotCode, true)
+        .then((result) => {
+          if (result.data.success === true) {
+            console.log(result.data.message);
+          } else {
+            console.log(result.data.message);
+            toast.warning(result.data.message);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+
+    });
 
 
+
+  };
+
+
+  const getStartCodeAndStartTimer = () => {
+
+    //robota start sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
+    const robotCodes = ["11", "22", "33", "44"];
+
+    // Her robot kodu için bir API isteği oluştur
+    robotCodes.forEach((robotCode) => {
+      roboRallyServerService.updateStartByCode(robotCode, true)
+        .then((result) => {
+          if (result.data.success === true) {
+            console.log(result.data.message);
+          } else {
+            console.log(result.data.message);
+            toast.warning(result.data.message);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+
+    });
+
+  };
+
+  const getStopCodeAndStopTimer = () => {
+
+    //robota start sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
+    const robotCodes = ["11", "22", "33", "44"];
+
+
+    // Her robot kodu için bir API isteği oluştur
+    robotCodes.forEach((robotCode) => {
+      roboRallyServerService.updateReadyAndStartByCode(robotCode, false, false)
+        .then((result) => {
+          if (result.data.success === true) {
+            console.log(result.data.message);
+          } else {
+            console.log(result.data.message);
+            toast.warning(result.data.message);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+
+    });
+
+  };
+
+
+
+  // console.log("competitors")
+  // console.log(competitors)
 
 
 
@@ -302,6 +408,15 @@ export default function MainPage1() {
     return gradientColors[index] || gradientColors[gradientColors.length - 1];
   };
 
+  // Helper function to get gradient colors based on index
+  const getGradientStart = (index) => {
+    // Define your gradient colors logic here
+    const gradientColors = [
+      `linear-gradient(to left, rgba(250, 100, 38, 0.8), rgba(220, 0, 0, 0.6))`
+    ];
+    return gradientColors[index] || gradientColors[gradientColors.length - 1];
+  };
+
   // Helper function to get medal icon based on index
   const getMedalIcon = (index) => {
     const medalIcons = ['1.png', '2.png', '3.png'];
@@ -312,12 +427,30 @@ export default function MainPage1() {
 
     // index numarasına göre div boya koyudan açık renge doğru
     const gradientColors = getGradientColors(index);
+
     // index bilgisine göre sıralama toplarını listele.
     const medalIcon = getMedalIcon(index);
 
+    // index numarasına göre div boya kırmızı koyudan açık renge doğru
+    const gradientColorsStart = getGradientStart(index);
+
+    // Yarışmacının "start" alanına göre stil belirle
+    const divStyle = {
+      width: "95%",
+      height: "8.8%",
+      borderRadius: "50px",
+      backgroundImage: competitor.ready ? gradientColorsStart : gradientColors,
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: "0.3%",
+      border: competitor.ready ? "4px ridge white" : "2px solid white",  // "ready" true ise kırmızı, değilse beyaz kenarlık
+      animation: competitor.ready ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir  
+
+    };
+
     return (
       // yarışmacıları listeleyen yatay cubuk
-      <div key={competitor.id} style={{ width: "95%", height: "8.8%", borderRadius: "50px", backgroundImage: gradientColors, display: 'flex', alignItems: 'center', marginBottom: "0.3%", border: "2px solid white" }}>
+      <div key={competitor.id} style={divStyle}>
 
         {/* sıralama kısmı */}
         <div style={{ flex: "0.3" }}>
@@ -345,15 +478,11 @@ export default function MainPage1() {
 
           {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
 
-
-
-          {/*competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : formatTime(competitor.time)*/}
-
         </div>
 
         <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-          <Button onClick={() => startTimer(competitor.id)} >Start</Button>
-          <Button onClick={() => stopTimer(competitor.id)} >Stop</Button>
+          {/* <Button onClick={() => startTimer(competitor.id)} >Start</Button> */}
+          {/* <Button onClick={() => stopTimer(competitor.id)} >Stop</Button> */}
           <div onClick={() => handleIconUpdateClick(competitor.id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
             <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
           </div>
@@ -374,6 +503,9 @@ export default function MainPage1() {
 
         <img src={`${process.env.PUBLIC_URL}/homeLogo.png`} alt="sunnyTeknolojiLogo" style={{ width: '25%', height: '15vh', position: 'fixed', top: '1%', left: '3%' }} />
 
+        <Button onClick={() => getReadyCode()} >Ready</Button>
+        <Button onClick={() => getStartCodeAndStartTimer()} >Start</Button>
+        <Button onClick={() => getStopCodeAndStopTimer()} >Stop</Button>
         <div onClick={handleShowAddOpen} style={{ cursor: 'pointer' }}>
           <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '15%', height: '8vh', position: 'fixed', top: '3%', right: '13%' }} />
         </div>
@@ -473,10 +605,10 @@ export default function MainPage1() {
                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
                 <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
               </Form.Group>
-              <div style={{  display: 'flex', alignItems: 'center'}}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Form.Label>Başlangıç : </Form.Label>
                 <Form.Control
-                  style={{ width: '12vw',height:"3.5vh", marginLeft: "10px" }} // Genişlik ayarlayın
+                  style={{ width: '15vw', height: "3.5vh", marginLeft: "10px" }} // Genişlik ayarlayın
                   type="text"
                   placeholder={start}
                   aria-label="Disabled input example"
@@ -486,10 +618,10 @@ export default function MainPage1() {
               </div>
 
               <br />
-              <div style={{  display: 'flex', alignItems: 'center'}}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Form.Label>Bitiş : </Form.Label>
                 <Form.Control
-                  style={{ width: '12vw',height:"3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
+                  style={{ width: '15vw', height: "3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
                   type="text"
                   placeholder={stop}
                   aria-label="Disabled input example"
@@ -498,10 +630,10 @@ export default function MainPage1() {
                 />
               </div>
               <br />
-              <div style={{  display: 'flex', alignItems: 'center'}}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Form.Label>Süre : </Form.Label>
                 <Form.Control
-                  style={{ width: '10vw',height:"3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
+                  style={{ width: '10vw', height: "3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
                   type="text"
                   placeholder={duration}
                   aria-label="Disabled input example"
