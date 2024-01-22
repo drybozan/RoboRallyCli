@@ -93,26 +93,6 @@ export default class RoboRallyServerService {
         })
     }
 
-    updateStartTimeById(id,startTime) {
-
-        return axios({
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateStartTimeById?id=${id}&startTime=${startTime}`,
-          
-        })
-    }
-
-
-    updateStopTimeById(id,stopTime) {
-
-        return axios({
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateStopTimeById?id=${id}&stopTime=${stopTime}`,
-          
-        })
-    }
 
  
     updateReadyByCode(code,ready) {
@@ -125,22 +105,22 @@ export default class RoboRallyServerService {
         })
     }
 
-    updateStartByCode(code,start) {
+    updateStartByCode(codes,start) {
 
         return axios({
             method: 'post',
             maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateStartByCode?code=${code}&start=${start}`,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateStartByCode?codes=${codes}&start=${start}`,
           
         })
     }
 
-    updateReadyAndStartByCode(code,ready,start) {
+    updateReadyAndStartByCode(codes,ready,start) {
 
         return axios({
             method: 'post',
             maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateReadyAndStartByCode?code=${code}&ready=${ready}&start=${start}`,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateReadyAndStartByCode?codes=${codes}&ready=${ready}&start=${start}`,
           
         })
     }

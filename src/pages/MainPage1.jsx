@@ -267,51 +267,6 @@ export default function MainPage1() {
     }
   }
 
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    const formattedDate = now.toLocaleString('tr-TR', { year: 'numeric', month: '2-digit', day: '2-digit', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const milliseconds = `${now.getMilliseconds()}`.padStart(3, '0');
-    return `${formattedDate}:${milliseconds}`;
-  };
-
-  const startTimer = (id) => {
-
-    console.log("Start timer for id: ", id);
-
-    console.log("getCurrentDateTime : ", getCurrentDateTime());
-    roboRallyServerService.updateStartTimeById(id, getCurrentDateTime())
-      .then((result) => {
-        if (result.data.success === true) {
-          console.log(result.data.message);
-        } else {
-          console.log(result.data.message);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-  };
-
-  const stopTimer = (id) => {
-
-    console.log("Stop timer for id: ", id);
-
-    console.log("getCurrentDateTime : ", getCurrentDateTime());
-
-    roboRallyServerService.updateStopTimeById(id, getCurrentDateTime())
-      .then((result) => {
-        if (result.data.success === true) {
-          console.log(result.data.message);
-        } else {
-          console.log(result.data.message);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-  };
 
   const getReadyCode = () => {
 
@@ -320,7 +275,7 @@ export default function MainPage1() {
 
     // Her robot kodu için bir API isteği oluştur
     robotCodes.forEach((robotCode) => {
-      roboRallyServerService.updateReadyByCode(robotCode, true)
+      roboRallyServerService.updateReadyByCode(robotCode,true)
         .then((result) => {
           if (result.data.success === true) {
             console.log(result.data.message);
@@ -343,11 +298,10 @@ export default function MainPage1() {
   const getStartCodeAndStartTimer = () => {
 
     //robota start sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
-    const robotCodes = ["11", "22", "33", "44"];
+    const robotCodes = ["11", "22", "33","44"];
 
-    // Her robot kodu için bir API isteği oluştur
-    robotCodes.forEach((robotCode) => {
-      roboRallyServerService.updateStartByCode(robotCode, true)
+ 
+      roboRallyServerService.updateStartByCode(robotCodes)
         .then((result) => {
           if (result.data.success === true) {
             console.log(result.data.message);
@@ -360,7 +314,7 @@ export default function MainPage1() {
           console.error(e);
         });
 
-    });
+
 
   };
 
@@ -370,9 +324,8 @@ export default function MainPage1() {
     const robotCodes = ["11", "22", "33", "44"];
 
 
-    // Her robot kodu için bir API isteği oluştur
-    robotCodes.forEach((robotCode) => {
-      roboRallyServerService.updateReadyAndStartByCode(robotCode, false, false)
+
+      roboRallyServerService.updateReadyAndStartByCode(robotCodes)
         .then((result) => {
           if (result.data.success === true) {
             console.log(result.data.message);
@@ -385,7 +338,7 @@ export default function MainPage1() {
           console.error(e);
         });
 
-    });
+ 
 
   };
 
@@ -409,10 +362,19 @@ export default function MainPage1() {
   };
 
   // Helper function to get gradient colors based on index
-  const getGradientStart = (index) => {
+  const getGradientReady = (index) => {
     // Define your gradient colors logic here
     const gradientColors = [
-      `linear-gradient(to left, rgba(250, 100, 38, 0.8), rgba(220, 0, 0, 0.6))`
+      `linear-gradient(to left, rgba(240, 205, 22, 0.8), rgba(240, 178, 22, 0.9))`
+    ];
+    return gradientColors[index] || gradientColors[gradientColors.length - 1];
+  };
+
+   // Helper function to get gradient colors based on index
+   const getGradientStart = (index) => {
+    // Define your gradient colors logic here
+    const gradientColors = [
+      `linear-gradient(to left, rgba(144, 158, 26, 0.8), rgba(4, 114, 26, 0.9))`
     ];
     return gradientColors[index] || gradientColors[gradientColors.length - 1];
   };
@@ -431,7 +393,11 @@ export default function MainPage1() {
     // index bilgisine göre sıralama toplarını listele.
     const medalIcon = getMedalIcon(index);
 
-    // index numarasına göre div boya kırmızı koyudan açık renge doğru
+    // index numarasına göre div boya sarı koyudan açık renge doğru
+    const gradientColorsReady = getGradientReady(index);
+
+
+    // index numarasına göre div boya yeşil koyudan açık renge doğru
     const gradientColorsStart = getGradientStart(index);
 
     // Yarışmacının "start" alanına göre stil belirle
@@ -439,7 +405,7 @@ export default function MainPage1() {
       width: "95%",
       height: "8.8%",
       borderRadius: "50px",
-      backgroundImage: competitor.ready ? gradientColorsStart : gradientColors,
+      backgroundImage: competitor.ready ? gradientColorsReady : competitor.start ? gradientColorsStart : gradientColors,
       display: 'flex',
       alignItems: 'center',
       marginBottom: "0.3%",
