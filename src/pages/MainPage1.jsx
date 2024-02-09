@@ -89,7 +89,7 @@ export default function MainPage1() {
     fetchData();
 
     // Her saniyede bir çalıştırmak için interval
-    const intervalId = setInterval(fetchData, 1000);
+    const intervalId = setInterval(fetchData, 500);
 
     // Component unmount edildiğinde interval'i temizle
     return () => clearInterval(intervalId);
@@ -275,7 +275,7 @@ export default function MainPage1() {
 
     // Her robot kodu için bir API isteği oluştur
     robotCodes.forEach((robotCode) => {
-      roboRallyServerService.updateReadyByCode(robotCode,true)
+      roboRallyServerService.updateReadyByCode(robotCode)
         .then((result) => {
           if (result.data.success === true) {
             console.log(result.data.message);
@@ -410,7 +410,7 @@ export default function MainPage1() {
       alignItems: 'center',
       marginBottom: "0.3%",
       border: competitor.ready ? "4px ridge white" : "2px solid white",  // "ready" true ise kırmızı, değilse beyaz kenarlık
-      animation: competitor.ready ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir  
+      animation: competitor.ready  ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir  
 
     };
 

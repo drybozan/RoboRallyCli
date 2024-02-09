@@ -218,47 +218,7 @@ export default function MainPage2() {
         const milliseconds = `${now.getMilliseconds()}`.padStart(3, '0');
         return `${formattedDate}:${milliseconds}`;
     };
-
-    const startTimer = (id) => {
-
-        console.log("Start timer for id: ", id);
-
-
-        console.log("getCurrentDateTime : ", getCurrentDateTime());
-        roboRallyServerService.updateStartTimeById(id, getCurrentDateTime())
-            .then((result) => {
-                if (result.data.success === true) {
-                    console.log(result.data.message);
-                } else {
-                    console.log(result.data.message);
-                }
-            })
-            .catch((e) => {
-                console.error(e);
-            });
-
-    };
-
-    const stopTimer = (id) => {
-
-        console.log("Stop timer for id: ", id);
-
-        console.log("getCurrentDateTime : ", getCurrentDateTime());
-
-        roboRallyServerService.updateStopTimeById(id, getCurrentDateTime())
-            .then((result) => {
-                if (result.data.success === true) {
-                    console.log(result.data.message);
-                } else {
-                    console.log(result.data.message);
-                }
-            })
-            .catch((e) => {
-                console.error(e);
-            });
-
-    };
-
+  
 
 
   // Helper function to get gradient colors based on index
@@ -298,7 +258,7 @@ export default function MainPage2() {
             alignItems: 'center',
             marginBottom: "0.3%",
             border: competitor.ready ? "4px ridge white" : "2px solid white",  // "ready" true ise kırmızı, değilse beyaz kenarlık
-            animation: competitor.ready ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir  
+            animation: competitor.ready  ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir  
 
         };
 
