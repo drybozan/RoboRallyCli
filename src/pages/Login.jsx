@@ -63,17 +63,28 @@ export default function Login() {
         }
     }
 
-    return (
-        <div style={{ width: screenWidth, height: screenHeight, backgroundImage: 'url(/loginBG.png)', backgroundSize: 'cover', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
 
-            <div style={{ width: '45%', height: "80%" , marginRight:"13vw"}} >
+    return (
+        <div style={{
+            width: screenWidth, height: screenHeight,
+            backgroundImage: 'url(/loginBG.png)',
+            backgroundSize: '100% 100%', // Yatay boyutu otomatik, dikey boyutu %100 olacak şekilde ayarla
+            backgroundRepeat: 'no-repeat', // Arka plan resmini yalnızca bir kez göster
+            backgroundPosition: 'center', // Resmi ekranda merkeze hizala
+            display: 'flex', 
+            justifyContent: 'flex-start',
+            alignItems: 'center' }}>
+
+            <div style={{ width: '45%', height: "80%", marginRight: "13vw" }} >
 
                 <img src="/loginSunny.png" alt="sunnyTeknolojiLogo" style={{ width: '100%', height: "100%" }} />
-
+                width: {screenWidth}, height: {screenHeight}
 
             </div>
-            <div style={{ padding: '20px', background: 'white', width: '23%', height: '55%', borderRadius: '7%', 
-            display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', boxShadow: '-12px -12px 3px 2px rgba(230, 230, 230, 0.5)' }}>
+            <div style={{
+                padding: '20px', background: 'white', width: '23%', height: '55%', borderRadius: '7%',
+                display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', boxShadow: '-12px -12px 3px 2px rgba(230, 230, 230, 0.5)'
+            }}>
 
                 <div style={{ width: '20%', height: "18%", marginLeft: "75%" }}>
                     <img src="/yildiz.png" alt="sunnyTeknolojiLogo" style={{ width: '100%', height: "100%" }} />
@@ -83,27 +94,27 @@ export default function Login() {
                     <img src="/merhaba.png" alt="sunnyTeknolojiLogo" style={{ width: '100%', height: "100%" }} />
                 </div>
 
-                <Form style={{ width: '100%', marginTop: '5vh',marginBottom: '3vh' }}>
+                <Form style={{ width: '100%', marginTop: '5vh', marginBottom: '3vh' }}>
 
                     <Form.Group  >
-                    <Form.Label style={{ marginRight: '16vw' }}>Kullanıcı Adı</Form.Label>
-                        <Form.Control style={{ marginBottom: '3vh',height:"5vh" }}
-                            onChange={(e) => setUsername(e.target.value)}                           
+                        <Form.Label style={{ marginRight: '16vw' }}>Kullanıcı Adı</Form.Label>
+                        <Form.Control style={{ marginBottom: '3vh', height: "5vh" }}
+                            onChange={(e) => setUsername(e.target.value)}
                             value={username}
                         />
 
                     </Form.Group>
 
                     <Form.Group>
-                    <Form.Label style={{ marginRight: '19vw' }}>Şifre</Form.Label>
-                        <Form.Control style={{ marginBottom: '3vh',height:"5vh"  }}
+                        <Form.Label style={{ marginRight: '19vw' }}>Şifre</Form.Label>
+                        <Form.Control style={{ marginBottom: '3vh', height: "5vh" }}
                             onChange={(e) => setPassword(e.target.value)}
-                            type="password"                            
+                            type="password"
                             value={password}
                         />
                     </Form.Group>
                 </Form>
-                <Button style={{ width: '90%', height:"10%", color: 'white', border: '1px solid #000000', background: isHovered ? '#000D33' : '#000000', marginLeft: "5%"  }}
+                <Button style={{ width: '90%', height: "10%", color: 'white', border: '1px solid #000000', background: isHovered ? '#000D33' : '#000000', marginLeft: "5%" }}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={OnClickLogin}
@@ -113,9 +124,10 @@ export default function Login() {
 
             </div>
 
-
-
         </div>
+
+
+
 
 
     )

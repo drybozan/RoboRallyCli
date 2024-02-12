@@ -298,21 +298,21 @@ export default function MainPage1() {
   const getStartCodeAndStartTimer = () => {
 
     //robota start sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
-    const robotCodes = ["11", "22", "33","44"];
+    const robotCodes = ["11", "22", "33", "44"];
 
- 
-      roboRallyServerService.updateStartByCode(robotCodes)
-        .then((result) => {
-          if (result.data.success === true) {
-            console.log(result.data.message);
-          } else {
-            console.log(result.data.message);
-            toast.warning(result.data.message);
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+
+    roboRallyServerService.updateStartByCode(robotCodes)
+      .then((result) => {
+        if (result.data.success === true) {
+          console.log(result.data.message);
+        } else {
+          console.log(result.data.message);
+          toast.warning(result.data.message);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
 
 
 
@@ -325,20 +325,20 @@ export default function MainPage1() {
 
 
 
-      roboRallyServerService.updateReadyAndStartByCode(robotCodes)
-        .then((result) => {
-          if (result.data.success === true) {
-            console.log(result.data.message);
-          } else {
-            console.log(result.data.message);
-            toast.warning(result.data.message);
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+    roboRallyServerService.updateReadyAndStartByCode(robotCodes)
+      .then((result) => {
+        if (result.data.success === true) {
+          console.log(result.data.message);
+        } else {
+          console.log(result.data.message);
+          toast.warning(result.data.message);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
 
- 
+
 
   };
 
@@ -370,8 +370,8 @@ export default function MainPage1() {
     return gradientColors[index] || gradientColors[gradientColors.length - 1];
   };
 
-   // Helper function to get gradient colors based on index
-   const getGradientStart = (index) => {
+  // Helper function to get gradient colors based on index
+  const getGradientStart = (index) => {
     // Define your gradient colors logic here
     const gradientColors = [
       `linear-gradient(to left, rgba(144, 158, 26, 0.8), rgba(4, 114, 26, 0.9))`
@@ -402,7 +402,7 @@ export default function MainPage1() {
 
     // Yarışmacının "start" alanına göre stil belirle
     const divStyle = {
-      width: "95%",
+      width: "100%",
       height: "8.8%",
       borderRadius: "50px",
       backgroundImage: competitor.ready ? gradientColorsReady : competitor.start ? gradientColorsStart : gradientColors,
@@ -410,7 +410,7 @@ export default function MainPage1() {
       alignItems: 'center',
       marginBottom: "0.3%",
       border: competitor.ready ? "4px ridge white" : "2px solid white",  // "ready" true ise kırmızı, değilse beyaz kenarlık
-      animation: competitor.ready  ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir  
+      animation: competitor.ready ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir  
 
     };
 
@@ -463,7 +463,17 @@ export default function MainPage1() {
 
 
   return (
-    <div style={{ width: screenWidth, height: screenHeight, backgroundImage: 'url(/homeBG3.png)', backgroundSize: 'cover', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{
+      width: screenWidth, height: screenHeight,
+      backgroundImage: 'url(/homeBG3.png)',
+      backgroundSize: '100% 100%', // Yatay boyutu otomatik, dikey boyutu %100 olacak şekilde ayarla
+      backgroundRepeat: 'no-repeat', // Arka plan resmini yalnızca bir kez göster
+      backgroundPosition: 'center', // Resmi ekranda merkeze hizala
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
 
@@ -473,7 +483,7 @@ export default function MainPage1() {
         <Button onClick={() => getStartCodeAndStartTimer()} >Start</Button>
         <Button onClick={() => getStopCodeAndStopTimer()} >Stop</Button>
         <div onClick={handleShowAddOpen} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '15%', height: '8vh', position: 'fixed', top: '3%', right: '13%' }} />
+          <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '12%', height: '8vh', position: 'fixed', top: '3%', right: '13%' }} />
         </div>
 
 
@@ -484,10 +494,10 @@ export default function MainPage1() {
       </div>
 
 
-      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "3%" }}>
+      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "1%"}}>
 
         {/* tablo başlıkları  */}
-        <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
+        <div style={{ width: "95%", height: "5%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
           <div style={{ flex: "0.3" }}></div>
           <div style={{ flex: "0.5" }}>ŞEHİR </div>
           <div style={{ flex: "3" }}> YARIŞMACI </div>
@@ -495,15 +505,17 @@ export default function MainPage1() {
           <div style={{ flex: "0.5" }}> </div>
         </div>
 
-        {/* tablonun gövdesi */}
-        {sections}
+        <div style={{ width: "95%", height: "98%" }}>
+          {/* tablonun gövdesi */}
+          {sections}
 
-        {/* <WebSocketComponent /> */}
+          {/* <WebSocketComponent /> */}
+        </div>
 
       </div>
 
       <div onClick={() => nextPageClick()} style={{ cursor: 'pointer' }}>
-        <img src={`${process.env.PUBLIC_URL}/firstPage.png`} alt="first page" style={{ width: '6%', height: '7vh', position: 'fixed', bottom: '1.2%', right: '7%' }} />
+        <img src={`${process.env.PUBLIC_URL}/firstPage.png`} alt="first page" style={{ width: '6%', height: '7vh', position: 'fixed', bottom: '2%', right: '7%' }} />
       </div>
 
       {/* YARIŞMACI EKLEME MODAL */}

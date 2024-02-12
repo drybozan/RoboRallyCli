@@ -250,7 +250,7 @@ export default function MainPage2() {
 
         // Yarışmacının "start" alanına göre stil belirle
         const divStyle = {
-            width: "95%",
+            width: "100%",
             height: "8.8%",
             borderRadius: "50px",
             backgroundImage: competitor.ready ? gradientColorsStart : gradientColors,
@@ -284,8 +284,8 @@ export default function MainPage2() {
 
                 {/* yarısmacı bilgileri*/}
                 <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
-                <div style={{ flex: "3", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
-                <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+                <div style={{flex: "3", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
+                <div style={{flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
                     {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
 
                     {/* {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : formatTime(competitor.time)} */}
@@ -309,7 +309,15 @@ export default function MainPage2() {
 
 
     return (
-        <div style={{ width: screenWidth, height: screenHeight, backgroundImage: 'url(/homeBG3.png)', backgroundSize: 'cover', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ width: screenWidth, height: screenHeight, 
+        backgroundImage: 'url(/homeBG3.png)', 
+        backgroundSize: '100% 100%', // Yatay boyutu otomatik, dikey boyutu %100 olacak şekilde ayarla
+        backgroundRepeat: 'no-repeat', // Arka plan resmini yalnızca bir kez göster
+        backgroundPosition: 'center', // Resmi ekranda merkeze hizala
+        display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        alignItems: 'center' }}>
 
             <div style={{ display: 'flex', justifyContent: 'center' }}>
 
@@ -323,17 +331,18 @@ export default function MainPage2() {
             <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "0.1%" }}>
 
                 {/* tablo başlıkları  */}
-                <div style={{ width: "95%", height: "7%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
+                <div style={{ width: "95%", height: "5%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
                     <div style={{ flex: "0.3" }}></div>
                     <div style={{ flex: "0.5" }}>ŞEHİR </div>
                     <div style={{ flex: "3" }}> YARIŞMACI </div>
                     <div style={{ flex: "0.5" }}> SÜRE </div>
                     <div style={{ flex: "0.5" }}></div>
                 </div>
-
+                <div style={{ width: "95%", height: "98%"}}>
 
                 {/* tablonun gövdesi */}
                 {sections}
+                </div>
 
             </div>
 
