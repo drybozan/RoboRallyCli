@@ -78,8 +78,7 @@ export default function Login() {
             <div style={{ width: '45%', height: "80%", marginRight: "13vw" }} >
 
                 <img src="/loginSunny.png" alt="sunnyTeknolojiLogo" style={{ width: '100%', height: "100%" }} />
-                width: {screenWidth}, height: {screenHeight}
-
+              
             </div>
             <div style={{
                 padding: '20px', background: 'white', width: '23%', height: '55%', borderRadius: '7%',
