@@ -125,6 +125,22 @@ export default class RoboRallyServerService {
         })
     }
 
+    getLogFileNames(id) {
+        return axios({
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/LogController/getLogFileNames`,
+          
+        })
+    }
 
+    getLogFile(logFileName) {
+        return axios({
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/LogController/getLogFile?logFileName=${logFileName}`,
+          
+        })
+    }
 
 }

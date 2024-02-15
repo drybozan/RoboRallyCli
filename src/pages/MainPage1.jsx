@@ -8,6 +8,7 @@ import '../style.css';  // styles.css dosyasını içe aktarın
 
 
 
+
 export default function MainPage1() {
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth); //tarayıcı penceresinin mevcut genişliği  
@@ -23,15 +24,21 @@ export default function MainPage1() {
   //yarismacı guncelleme modalı için
   const [showUpdate, setShowUpdate] = useState(false);
 
+  //log goruntule
+  const [showLog, setShowLog] = useState(false);
+
   const [id, setId] = useState(0);
   const [city, setCity] = useState("");
   const [name, setName] = useState("");
   const [isEliminated, setEliminated] = useState(false);
-  const [start, setStart] = useState("");
-  const [stop, setStop] = useState("");
-  const [duration, setDuration] = useState("");
+
 
   const [competitors, setCompetitors] = useState([]);
+
+  const [logFileNameOptions, setLogFileNameOptions] = useState([]); // log dosya isimlerini saklamak için state.
+  const [logFileName, setLogFileName] = useState("");
+  const [logData, setLogData] = useState([]);
+
 
   useEffect(() => {
     // Function to update screen dimensions on resize
@@ -122,9 +129,6 @@ export default function MainPage1() {
     setCity("")
     setName("")
     setEliminated(false)
-    setStart("")
-    setStop("")
-    setDuration("")
     setShowUpdate(false)
   };
 
@@ -144,9 +148,7 @@ export default function MainPage1() {
         setCity(result.data.data.city.toUpperCase())
         setName(result.data.data.name)
         setEliminated(result.data.data.eliminated)
-        setStart(result.data.data.startTime)
-        setStop(result.data.data.stopTime)
-        setDuration(result.data.data.duration)
+
       } else {
         toast.error(result.data.message);
 
@@ -201,9 +203,7 @@ export default function MainPage1() {
         setCity("")
         setName("")
         setEliminated(false)
-        setStart("")
-        setStop("")
-        setDuration("")
+
 
       });
 
@@ -266,6 +266,103 @@ export default function MainPage1() {
 
     }
   }
+
+  //all log file names to dropdown
+  useEffect(() => {
+    roboRallyServerService.getLogFileNames().then(result =>
+      //console.log(result.data.data)      
+      setLogFileNameOptions(result.data.data)
+    ).catch((e) => {
+      console.error(e);
+    });
+  }, [showLog])
+
+
+  //get log file when filename change
+  useEffect(() => {
+    // Her log dosyası değiştiğinde logData state'ini temizle
+    setLogData([]);
+
+    if (logFileName) { // logFileName değişkeni bir degere sahipse calissin
+
+      // Yeni log dosyasını al
+      roboRallyServerService.getLogFile(logFileName)
+        .then(result => {
+          // Gelen verinin içerisindeki "data" alanına eriş
+          const rawData = result.data;
+          // Her bir satırı ayır
+          const lines = rawData.trim().split('\n');
+          // Her bir satırı JSON nesnesine dönüştür
+          const parsedData = lines.map(line => JSON.parse(line));
+          //console.log("parsedData")
+          //console.log(parsedData)
+          // State'i güncelle
+          setLogData(parsedData);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
+
+  }, [logFileName]);
+
+  const getMessageColor = (messageType) => {
+    switch (messageType.toLowerCase()) {
+      case 'success':
+        return 'green';
+      case 'info':
+        return '#FFC800';
+      case 'error':
+        return 'red';
+      default:
+        return 'black'; // or any default color you prefer
+    }
+  };
+
+  //   function parseDefCompetitors(message) {
+  //     const startIndex = message.indexOf("DefCompetitors(");
+  //     if (startIndex !== -1) {
+  //       const defCompetitorsStartIndex = message.lastIndexOf(":", startIndex);
+  //         if (defCompetitorsStartIndex !== -1) {
+  //             const defCompetitorsString = message.substring(startIndex, endIndex + 1);
+  //             const properties = defCompetitorsString.match(/\w+\s*=\s*['"]?[\w\d\s:.=-]+['"]?/g);
+  //             if (properties) {
+  //                 const formattedContent = properties.map(prop => {
+  //                     const [key, value] = prop.split('=');
+  //                     return `${key.trim()}: ${value.trim()}`;
+  //                 }).join("\n");
+  //                 return formattedContent;
+  //             }
+  //         }
+  //     }
+  //     return null;
+  // }
+
+  function parseDefCompetitors(message) {
+    const defCompetitorsIndex = message.indexOf("DefCompetitors(");
+    if (defCompetitorsIndex !== -1) {
+      const preDefCompetitorsString = message.substring(0, defCompetitorsIndex).trim();
+      const defCompetitorsString = message.substring(defCompetitorsIndex).trim();
+      const endIndex = defCompetitorsString.lastIndexOf(")");
+      if (endIndex !== -1) {
+        const properties = defCompetitorsString.substring(0, endIndex).match(/\w+\s*=\s*[^,]+/g);
+        if (properties) {
+          const formattedContent = properties.map(prop => {
+            const [key, value] = prop.split('=');
+            return `${key.trim()}: ${value.trim()}`;
+          }).join("\n");
+          return `${preDefCompetitorsString}\n${formattedContent}`;
+        }
+      }
+    }
+    return null;
+  }
+
+
+
+
+
+
 
 
   const getReadyCode = () => {
@@ -482,6 +579,7 @@ export default function MainPage1() {
         <Button onClick={() => getReadyCode()} >Ready</Button>
         <Button onClick={() => getStartCodeAndStartTimer()} >Start</Button>
         <Button onClick={() => getStopCodeAndStopTimer()} >Stop</Button>
+        <Button onClick={() => setShowLog(true)} >Get Log </Button>
         <div onClick={handleShowAddOpen} style={{ cursor: 'pointer' }}>
           <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '12%', height: '8vh', position: 'fixed', top: '3%', right: '13%' }} />
         </div>
@@ -494,7 +592,7 @@ export default function MainPage1() {
       </div>
 
 
-      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "1%"}}>
+      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "1%" }}>
 
         {/* tablo başlıkları  */}
         <div style={{ width: "95%", height: "5%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
@@ -583,43 +681,7 @@ export default function MainPage1() {
                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
                 <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
               </Form.Group>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Form.Label>Başlangıç : </Form.Label>
-                <Form.Control
-                  style={{ width: '15vw', height: "3.5vh", marginLeft: "10px" }} // Genişlik ayarlayın
-                  type="text"
-                  placeholder={start}
-                  aria-label="Disabled input example"
-                  disabled
-                  readOnly
-                />
-              </div>
 
-              <br />
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Form.Label>Bitiş : </Form.Label>
-                <Form.Control
-                  style={{ width: '15vw', height: "3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
-                  type="text"
-                  placeholder={stop}
-                  aria-label="Disabled input example"
-                  disabled
-                  readOnly
-                />
-              </div>
-              <br />
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Form.Label>Süre : </Form.Label>
-                <Form.Control
-                  style={{ width: '10vw', height: "3.5vh", marginLeft: "15px" }} // Genişlik ayarlayın
-                  type="text"
-                  placeholder={duration}
-                  aria-label="Disabled input example"
-                  disabled
-                  readOnly
-                />
-              </div>
-              <br />
               <Form.Check // prettier-ignore
                 type="switch"
                 id="custom-switch"
@@ -641,7 +703,68 @@ export default function MainPage1() {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        {/* LOG LİSTEME MODAL */}
+
+        <Modal
+          show={showLog}
+          onHide={() => { setShowLog(false); setLogFileName("") }}
+          size="xl"
+          scrollable // Modalın kendi kaydırma çubuğunu devre dışı bırakır  
+
+        >
+
+          <Modal.Header closeButton>
+            <Modal.Title style={{ fontFamily: 'New Times Roman' }}>
+              LOG GÖRÜNTÜLE
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body
+          // style={{ width:"100%",height:"100vh"}} 
+          >
+
+            <Form.Select aria-label="Default select example" onChange={(e) => setLogFileName(e.target.value)} value={logFileName || ''} style={{ width: '40vw', margin: "0 auto", marginBottom: "1.5%", fontFamily: 'New Times Roman' }}>
+             
+              <option value="" disabled selected>Yarışmacı seçiniz</option>
+
+              {logFileNameOptions.map((logFileNameOption) => (
+                <option value={logFileNameOption}> {logFileNameOption.replace('.json', '')}</option>
+              ))}
+
+            </Form.Select>
+            <div>
+              {logData.length > 0 && (
+                <div>
+                  {logData.map((log, index) => (
+                    <div key={index} style={{ display: "flex", fontFamily: 'New Times Roman', fontSize: 17, marginLeft: "10px" }}>
+
+                      <p style={{ color: getMessageColor(log.messageType) }}>{log.messageType}:</p>
+
+                      {parseDefCompetitors(log.message) ? (
+                        <div >
+                          {parseDefCompetitors(log.message).split('\n').map((line, i) => (
+                            <p key={i} style={{ fontSize: 17, color: "black" }}>{line}</p>
+                          ))}
+                        </div>
+                      ) :
+
+                        (
+                          <p style={{ color: "black" }}>{log.date} - {log.message}</p>
+                        )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+
+          </Modal.Body>
+        </Modal>
+
+
       </>
+
+
 
     </div>
   )
