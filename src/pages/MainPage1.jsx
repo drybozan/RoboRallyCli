@@ -741,11 +741,11 @@ export default function MainPage1() {
                       <p style={{ color: getMessageColor(log.messageType) }}>{log.messageType}:</p>
 
                       {parseDefCompetitors(log.message) ? (
-                        <div >
+                      <><p style={{ color: "black" }}>{log.date} - </p><div>
                           {parseDefCompetitors(log.message).split('\n').map((line, i) => (
                             <p key={i} style={{ fontSize: 17, color: "black" }}>{line}</p>
                           ))}
-                        </div>
+                        </div></>
                       ) :
 
                         (
