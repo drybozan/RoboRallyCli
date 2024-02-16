@@ -290,15 +290,31 @@ export default function MainPage1() {
         .then(result => {
           // Gelen verinin içerisindeki "data" alanına eriş
           const rawData = result.data;
+        
+          if (typeof rawData === "object") { // sadece tek satırlık log geldiğinde object olarak geliyor.
 
-          // Her bir satırı ayır
-          const lines = rawData.trim().split('\n');
-          // Her bir satırı JSON nesnesine dönüştür
-          const parsedData = lines.map(line => JSON.parse(line));
-          //console.log("parsedData")
-          //console.log(parsedData)
-          // State'i güncelle
-          setLogData(parsedData);
+            const rawDataString = JSON.stringify(rawData); //string e dönüştür
+
+            // Her bir satırı ayır
+            const lines = rawDataString.trim().split('\n');
+            
+            // Her bir satırı JSON nesnesine dönüştür
+            const parsedData = lines.map(line => JSON.parse(line));
+
+            setLogData(parsedData);
+
+          } else if (typeof rawData === "string") {
+
+            // Her bir satırı ayır
+            const lines = rawData.trim().split('\n');
+            // Her bir satırı JSON nesnesine dönüştür
+            const parsedData = lines.map(line => JSON.parse(line));
+
+            // State'i güncelle
+            setLogData(parsedData);
+
+          }
+
 
 
         })
@@ -308,6 +324,12 @@ export default function MainPage1() {
     }
 
   }, [logFileName]);
+  //  console.log("logData")
+  // console.log(logData)
+
+  // console.log("logData.length")
+  // console.log(logData.length)
+
 
   const getMessageColor = (messageType) => {
     switch (messageType.toLowerCase()) {
@@ -498,8 +520,8 @@ export default function MainPage1() {
         </div>
 
         {/* yarısmacı bilgileri*/}
-        <div style={{ flex: "0.2" ,fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
-        <div style={{ flex: "4" , fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman'}}>{competitor.name.toUpperCase()}
+        <div style={{ flex: "0.2", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
+        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}
         </div>
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
@@ -571,7 +593,6 @@ export default function MainPage1() {
           {/* tablonun gövdesi */}
           {sections}
 
-          {/* <WebSocketComponent /> */}
         </div>
 
       </div>
@@ -697,6 +718,7 @@ export default function MainPage1() {
 
             </Form.Select>
             <div>
+
               {logData.length > 0 && (
                 <div>
                   {logData.map((log, index) => (
