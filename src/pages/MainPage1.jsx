@@ -96,7 +96,7 @@ export default function MainPage1() {
     fetchData();
 
     // Her saniyede bir çalıştırmak için interval
-    const intervalId = setInterval(fetchData, 500);
+    const intervalId = setInterval(fetchData, 1000);
 
     // Component unmount edildiğinde interval'i temizle
     return () => clearInterval(intervalId);
@@ -290,6 +290,7 @@ export default function MainPage1() {
         .then(result => {
           // Gelen verinin içerisindeki "data" alanına eriş
           const rawData = result.data;
+
           // Her bir satırı ayır
           const lines = rawData.trim().split('\n');
           // Her bir satırı JSON nesnesine dönüştür
@@ -298,6 +299,8 @@ export default function MainPage1() {
           //console.log(parsedData)
           // State'i güncelle
           setLogData(parsedData);
+
+
         })
         .catch((e) => {
           console.error(e);
@@ -319,24 +322,6 @@ export default function MainPage1() {
     }
   };
 
-  //   function parseDefCompetitors(message) {
-  //     const startIndex = message.indexOf("DefCompetitors(");
-  //     if (startIndex !== -1) {
-  //       const defCompetitorsStartIndex = message.lastIndexOf(":", startIndex);
-  //         if (defCompetitorsStartIndex !== -1) {
-  //             const defCompetitorsString = message.substring(startIndex, endIndex + 1);
-  //             const properties = defCompetitorsString.match(/\w+\s*=\s*['"]?[\w\d\s:.=-]+['"]?/g);
-  //             if (properties) {
-  //                 const formattedContent = properties.map(prop => {
-  //                     const [key, value] = prop.split('=');
-  //                     return `${key.trim()}: ${value.trim()}`;
-  //                 }).join("\n");
-  //                 return formattedContent;
-  //             }
-  //         }
-  //     }
-  //     return null;
-  // }
 
   function parseDefCompetitors(message) {
     const defCompetitorsIndex = message.indexOf("DefCompetitors(");
@@ -359,35 +344,23 @@ export default function MainPage1() {
   }
 
 
-
-
-
-
-
-
   const getReadyCode = () => {
 
     //robota ready sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
     const robotCodes = ["11", "22", "33", "44"];
 
-    // Her robot kodu için bir API isteği oluştur
-    robotCodes.forEach((robotCode) => {
-      roboRallyServerService.updateReadyByCode(robotCode)
-        .then((result) => {
-          if (result.data.success === true) {
-            console.log(result.data.message);
-          } else {
-            console.log(result.data.message);
-            toast.warning(result.data.message);
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-
-    });
-
-
+    roboRallyServerService.updateReadyByCode(robotCodes)
+      .then((result) => {
+        if (result.data.success === true) {
+          console.log(result.data.message);
+        } else {
+          console.log(result.data.message);
+          toast.warning(result.data.message);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
 
   };
 
@@ -396,7 +369,6 @@ export default function MainPage1() {
 
     //robota start sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
     const robotCodes = ["11", "22", "33", "44"];
-
 
     roboRallyServerService.updateStartByCode(robotCodes)
       .then((result) => {
@@ -410,17 +382,12 @@ export default function MainPage1() {
       .catch((e) => {
         console.error(e);
       });
-
-
-
   };
 
   const getStopCodeAndStopTimer = () => {
 
     //robota start sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
     const robotCodes = ["11", "22", "33", "44"];
-
-
 
     roboRallyServerService.updateReadyAndStartByCode(robotCodes)
       .then((result) => {
@@ -436,14 +403,11 @@ export default function MainPage1() {
       });
 
 
-
   };
-
 
 
   // console.log("competitors")
   // console.log(competitors)
-
 
 
   // Helper function to get gradient colors based on index
@@ -534,8 +498,8 @@ export default function MainPage1() {
         </div>
 
         {/* yarısmacı bilgileri*/}
-        <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
-        <div style={{ flex: "3", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}
+        <div style={{ flex: "0.2" ,fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
+        <div style={{ flex: "4" , fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman'}}>{competitor.name.toUpperCase()}
         </div>
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
@@ -597,8 +561,8 @@ export default function MainPage1() {
         {/* tablo başlıkları  */}
         <div style={{ width: "95%", height: "5%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
           <div style={{ flex: "0.3" }}></div>
-          <div style={{ flex: "0.5" }}>ŞEHİR </div>
-          <div style={{ flex: "3" }}> YARIŞMACI </div>
+          <div style={{ flex: "0.2" }}>ŞEHİR </div>
+          <div style={{ flex: "4" }}> YARIŞMACI </div>
           <div style={{ flex: "0.5" }}> SÜRE </div>
           <div style={{ flex: "0.5" }}> </div>
         </div>
@@ -724,10 +688,10 @@ export default function MainPage1() {
           >
 
             <Form.Select aria-label="Default select example" onChange={(e) => setLogFileName(e.target.value)} value={logFileName || ''} style={{ width: '40vw', margin: "0 auto", marginBottom: "1.5%", fontFamily: 'New Times Roman' }}>
-             
+
               <option value="" disabled selected>Yarışmacı seçiniz</option>
 
-              {logFileNameOptions.map((logFileNameOption) => (
+              {logFileNameOptions !== null && logFileNameOptions.map((logFileNameOption) => (
                 <option value={logFileNameOption}> {logFileNameOption.replace('.json', '')}</option>
               ))}
 
@@ -741,7 +705,7 @@ export default function MainPage1() {
                       <p style={{ color: getMessageColor(log.messageType) }}>{log.messageType}:</p>
 
                       {parseDefCompetitors(log.message) ? (
-                      <><p style={{ color: "black" }}>{log.date} - </p><div>
+                        <><p style={{ color: "black" }}>{log.date} - </p><div>
                           {parseDefCompetitors(log.message).split('\n').map((line, i) => (
                             <p key={i} style={{ fontSize: 17, color: "black" }}>{line}</p>
                           ))}

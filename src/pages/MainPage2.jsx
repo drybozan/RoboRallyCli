@@ -80,7 +80,7 @@ export default function MainPage2() {
         fetchData();
     
         // Her saniyede bir çalıştırmak için interval
-        const intervalId = setInterval(fetchData, 500);
+        const intervalId = setInterval(fetchData, 1000);
     
         // Component unmount edildiğinde interval'i temizle
         return () => clearInterval(intervalId);
@@ -267,12 +267,11 @@ export default function MainPage2() {
                 </div>
 
                 {/* yarısmacı bilgileri*/}
-                <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "37px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
-                <div style={{flex: "3", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
+                <div style={{ flex: "0.2", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
+                <div style={{flex: "4", fontWeight: 'bold', fontSize: "33px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}</div>
                 <div style={{flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
                     {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
 
-                    {/* {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : formatTime(competitor.time)} */}
                 </div>
 
                 <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
@@ -317,8 +316,8 @@ export default function MainPage2() {
                 {/* tablo başlıkları  */}
                 <div style={{ width: "95%", height: "5%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
                     <div style={{ flex: "0.3" }}></div>
-                    <div style={{ flex: "0.5" }}>ŞEHİR </div>
-                    <div style={{ flex: "3" }}> YARIŞMACI </div>
+                    <div style={{ flex: "0.2" }}>ŞEHİR </div>
+                    <div style={{ flex: "4" }}> YARIŞMACI </div>
                     <div style={{ flex: "0.5" }}> SÜRE </div>
                     <div style={{ flex: "0.5" }}></div>
                 </div>
