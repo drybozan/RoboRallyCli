@@ -564,18 +564,18 @@ export default function MainPage1() {
 
        
         <div onClick={() => getReadyCode()} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/button_ready.png`} alt="ready" style={{ width: '5vw', height: '6vh', position: 'fixed', top: '4%', left: '42%'}} />
+          <img src={`${process.env.PUBLIC_URL}/button_ready.png`} alt="ready" style={{ width: '5vw', height: '5vh', position: 'fixed', top: '4.8%', right: '37%'}} />
         </div>
 
         <div onClick={() => getStartCodeAndStartTimer()} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/button_start_green.png`} alt="start" style={{ width: '5vw', height: '6vh', position: 'fixed', top: '4%', left: '47%'}} />
+          <img src={`${process.env.PUBLIC_URL}/button_start.png`} alt="start" style={{ width: '5vw', height: '5vh', position: 'fixed', top: '4.8%', right: '31%'}} />
         </div>
         
-        <Button onClick={() => getStopCodeAndStopTimer()}  style={{  position: 'fixed', top: '5%', left: '65%'}}>Stop</Button>
+        <Button onClick={() => getStopCodeAndStopTimer()}  style={{  position: 'fixed', top: '5%', left: '35%'}}>Stop</Button>
 
 
         <div onClick={() => setShowLog(true)} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/button_log.png`} alt="log" style={{ width: '5vw', height: '5vh', position: 'fixed', top: '4.5%', right: '25.5%'}} />
+          <img src={`${process.env.PUBLIC_URL}/button_log.png`} alt="log" style={{ width: '5vw', height: '4.5vh', position: 'fixed', top: '5%', right: '25.5%'}} />
         </div>
         
         <div onClick={handleShowAddOpen} style={{ cursor: 'pointer' }}>
