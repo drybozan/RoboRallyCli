@@ -493,7 +493,8 @@ export default function MainPage1() {
       alignItems: 'center',
       marginBottom: "0.3%",
       border: competitor.ready ? "4px ridge white" : "2px solid white",  // "ready" true ise kırmızı, değilse beyaz kenarlık
-      animation: competitor.ready ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir  
+      animation: competitor.ready ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir    
+      
 
     };
 
@@ -502,7 +503,7 @@ export default function MainPage1() {
       <div key={competitor.id} style={divStyle}>
 
         {/* sıralama kısmı */}
-        <div style={{ flex: "0.3" }}>
+        <div style={{ flex: "0.1" }}>
           {/* sıralamanın yazıldığı yuvarlaklar*/}
           <div style={{ width: "60%", height: "100%", borderRadius: "50%" }}>
 
@@ -520,9 +521,8 @@ export default function MainPage1() {
         </div>
 
         {/* yarısmacı bilgileri*/}
-        <div style={{ flex: "0.2", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.city.toUpperCase()}</div>
-        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>{competitor.name.toUpperCase()}
-        </div>
+        <div style={{ flex: "0.6", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman',display: 'flex', alignItems: 'start' }}>{competitor.city.toUpperCase()}</div>
+        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start'}}>{competitor.name.toUpperCase()}</div>
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
           {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
@@ -562,10 +562,22 @@ export default function MainPage1() {
 
         <img src={`${process.env.PUBLIC_URL}/homeLogo.png`} alt="sunnyTeknolojiLogo" style={{ width: '25%', height: '15vh', position: 'fixed', top: '1%', left: '3%' }} />
 
-        <Button onClick={() => getReadyCode()} >Ready</Button>
-        <Button onClick={() => getStartCodeAndStartTimer()} >Start</Button>
-        <Button onClick={() => getStopCodeAndStopTimer()} >Stop</Button>
-        <Button onClick={() => setShowLog(true)} >Get Log </Button>
+       
+        <div onClick={() => getReadyCode()} style={{ cursor: 'pointer' }}>
+          <img src={`${process.env.PUBLIC_URL}/button_ready.png`} alt="ready" style={{ width: '5vw', height: '6vh', position: 'fixed', top: '4%', left: '42%'}} />
+        </div>
+
+        <div onClick={() => getStartCodeAndStartTimer()} style={{ cursor: 'pointer' }}>
+          <img src={`${process.env.PUBLIC_URL}/button_start_green.png`} alt="start" style={{ width: '5vw', height: '6vh', position: 'fixed', top: '4%', left: '47%'}} />
+        </div>
+        
+        <Button onClick={() => getStopCodeAndStopTimer()}  style={{  position: 'fixed', top: '5%', left: '65%'}}>Stop</Button>
+
+
+        <div onClick={() => setShowLog(true)} style={{ cursor: 'pointer' }}>
+          <img src={`${process.env.PUBLIC_URL}/button_log.png`} alt="log" style={{ width: '5vw', height: '5vh', position: 'fixed', top: '4.5%', right: '25.5%'}} />
+        </div>
+        
         <div onClick={handleShowAddOpen} style={{ cursor: 'pointer' }}>
           <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '12%', height: '8vh', position: 'fixed', top: '3%', right: '13%' }} />
         </div>
@@ -578,7 +590,7 @@ export default function MainPage1() {
       </div>
 
 
-      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "1%" }}>
+      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "2.2%" }}>
 
         {/* tablo başlıkları  */}
         <div style={{ width: "95%", height: "5%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
