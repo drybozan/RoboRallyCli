@@ -254,15 +254,15 @@ export default function MainPage2() {
                 <div style={{ flex: "0.1" }}>
                     {/* sıralamanın yazıldığı yuvarlaklar*/}
                     {adjustedIndex === 12 && (
-                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-40px', marginBottom: '8px' }} />
+                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="100" height="105" style={{ alignSelf: 'flex-start', marginLeft: '-32px', marginBottom: '8px' }} />
                     )}
 
                     {adjustedIndex === 14 && (
-                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-40px', marginTop: '7px' }} />
+                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="100" height="105" style={{ alignSelf: 'flex-start', marginLeft: '-32px', marginTop: '7px' }} />
                     )}
 
                     {adjustedIndex !== 12 && adjustedIndex !== 14 && (
-                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-40px' }} />
+                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="100" height="105" style={{ alignSelf: 'flex-start', marginLeft: '-32px' }} />
                     )}
                 </div>
 

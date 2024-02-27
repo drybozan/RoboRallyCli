@@ -508,12 +508,12 @@ export default function MainPage1() {
           <div style={{ width: "60%", height: "100%", borderRadius: "50%" }}>
 
             {index < 3 && (
-              <img src={`${process.env.PUBLIC_URL}/${medalIcon}`} alt={`Icon ${index + 1}`} width="110" height="110" style={{ alignSelf: 'flex-start', marginLeft: '-26px' }} />
+              <img src={`${process.env.PUBLIC_URL}/${medalIcon}`} alt={`Icon ${index + 1}`} width="90" height="90" style={{ alignSelf: 'flex-start', marginLeft: '-26px' }} />
             )}
 
             {index !== 0 && index !== 1 && index !== 2 && (
 
-              <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-36px' }} />
+              <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="100" height="105" style={{ alignSelf: 'flex-start', marginLeft: '-30px' }} />
 
             )}
 
