@@ -254,29 +254,28 @@ export default function MainPage2() {
                 <div style={{ flex: "0.1" }}>
                     {/* sıralamanın yazıldığı yuvarlaklar*/}
                     {adjustedIndex === 12 && (
-                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px', marginBottom: '8px' }} />
+                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-40px', marginBottom: '8px' }} />
                     )}
 
                     {adjustedIndex === 14 && (
-                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px', marginTop: '7px' }} />
+                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-40px', marginTop: '7px' }} />
                     )}
 
                     {adjustedIndex !== 12 && adjustedIndex !== 14 && (
-                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-58px' }} />
+                        <img src={`${process.env.PUBLIC_URL}/${adjustedIndex + 1}.png`} alt={`Icon ${adjustedIndex}`} width="123" height="125" style={{ alignSelf: 'flex-start', marginLeft: '-40px' }} />
                     )}
                 </div>
 
                 {/* yarısmacı bilgileri*/}
                 <div style={{ flex: "0.6", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman',display: 'flex', alignItems: 'start'}}>{competitor.city.toUpperCase()}</div>
-                <div style={{flex: "4", fontWeight: 'bold', fontSize: "33px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' ,display: 'flex', alignItems: 'start'}}>{competitor.name.toUpperCase()}</div>
+                <div style={{flex: "4", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' ,display: 'flex', alignItems: 'start'}}>{competitor.name.toUpperCase()}</div>
                 <div style={{flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
                     {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
 
                 </div>
 
                 <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                    {/* <Button onClick={() => startTimer(competitor.id)} >Start</Button>
-                    <Button onClick={() => stopTimer(competitor.id)} >Stop</Button> */}
+      
                     <div onClick={() => handleIconUpdateClick(competitor.id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
                         <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
                     </div>
