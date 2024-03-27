@@ -95,22 +95,22 @@ export default class RoboRallyServerService {
 
 
  
-    updateReadyByCode(codes) {
+    updateReadyByCode() {
 
         return axios({
             method: 'post',
             maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateReadyByCode?codes=${codes}`,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateReadyByCode`,
           
         })
     }
 
-    updateStartByCode(codes) {
+    updateStartByCode() {
 
         return axios({
             method: 'post',
             maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateStartByCode?codes=${codes}`,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateStartByCode`,
           
         })
     }

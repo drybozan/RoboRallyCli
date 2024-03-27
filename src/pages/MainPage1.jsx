@@ -366,12 +366,9 @@ export default function MainPage1() {
   }
 
 
-  const getReadyCode = () => {
+  const getReadyCode = () => {  
 
-    //robota ready sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
-    const robotCodes = ["11", "22", "33", "44"];
-
-    roboRallyServerService.updateReadyByCode(robotCodes)
+    roboRallyServerService.updateReadyByCode()
       .then((result) => {
         if (result.data.success === true) {
           console.log(result.data.message);
@@ -389,10 +386,7 @@ export default function MainPage1() {
 
   const getStartCodeAndStartTimer = () => {
 
-    //robota start sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
-    const robotCodes = ["11", "22", "33", "44"];
-
-    roboRallyServerService.updateStartByCode(robotCodes)
+    roboRallyServerService.updateStartByCode()
       .then((result) => {
         if (result.data.success === true) {
           console.log(result.data.message);
