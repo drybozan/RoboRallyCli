@@ -462,7 +462,7 @@ export default function MainPage1() {
     return medalIcons[index] || `${index + 1}.png`;
   };
 
-  const sections = competitors.slice(0, 10).map((competitor, index) => {
+  const sections = competitors.slice(0, 20).map((competitor, index) => {
 
     // index numarasına göre div boya koyudan açık renge doğru
     const gradientColors = getGradientColors(index);
@@ -477,15 +477,15 @@ export default function MainPage1() {
     // index numarasına göre div boya yeşil koyudan açık renge doğru
     const gradientColorsStart = getGradientStart(index);
 
-    // Yarışmacının "start" alanına göre stil belirle
+    // Yarışmacının listelendiği yatay cizgi still
     const divStyle = {
       width: "100%",
-      height: "8.8%",
+      height: "4.2%",
       borderRadius: "50px",
       backgroundImage: competitor.ready ? gradientColorsReady : competitor.start ? gradientColorsStart : gradientColors,
       display: 'flex',
       alignItems: 'center',
-      marginBottom: "0.3%",
+      marginBottom: "0.2%",
       border: competitor.ready ? "4px ridge white" : "2px solid white",  // "ready" true ise kırmızı, değilse beyaz kenarlık
       animation: competitor.ready ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir    
       
@@ -499,15 +499,15 @@ export default function MainPage1() {
         {/* sıralama kısmı */}
         <div style={{ flex: "0.1" }}>
           {/* sıralamanın yazıldığı yuvarlaklar*/}
-          <div style={{ width: "60%", height: "100%", borderRadius: "50%" }}>
+          <div style={{ width: "180%", height: "120%", borderRadius: "50%" }}>
 
             {index < 3 && (
-              <img src={`${process.env.PUBLIC_URL}/${medalIcon}`} alt={`Icon ${index + 1}`} width="90" height="90" style={{ alignSelf: 'flex-start', marginLeft: '-26px' }} />
+              <img src={`${process.env.PUBLIC_URL}/${medalIcon}`} alt={`Icon ${index + 1}`} width="95%" height="100%" style={{ alignSelf: 'flex-start', marginLeft: '-25px' }} />
             )}
 
             {index !== 0 && index !== 1 && index !== 2 && (
 
-              <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="100" height="105" style={{ alignSelf: 'flex-start', marginLeft: '-30px' }} />
+              <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`}  width="100%" height="100%" style={{ alignSelf: 'flex-start', marginLeft: '-25px' }} />
 
             )}
 
@@ -515,22 +515,22 @@ export default function MainPage1() {
         </div>
 
         {/* yarısmacı bilgileri*/}
-        <div style={{ flex: "0.6", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman',display: 'flex', alignItems: 'start' }}>{competitor.city.toUpperCase()}</div>
-        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "32px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start'}}>{competitor.name.toUpperCase()}</div>
-        <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "40px", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+        <div style={{ marginLeft:"0.5%",flex: "0.7", fontWeight: 'bold', fontSize: "140%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman',display: 'flex', alignItems: 'start' }}>{competitor.city.toUpperCase()}</div>
+        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "140%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start'}}>{competitor.name.toUpperCase()}</div>
+        <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "150%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
-          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="95" height="85" /> : competitor.duration}
+          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="20%" height="20%" /> : competitor.duration}
 
         </div>
 
-        <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+        <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center',width:"100%", height:"100%"  }}>
           {/* <Button onClick={() => startTimer(competitor.id)} >Start</Button> */}
           {/* <Button onClick={() => stopTimer(competitor.id)} >Stop</Button> */}
           <div onClick={() => handleIconUpdateClick(competitor.id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
-            <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="35" height="35" />
+            <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="100%" height="100%" />
           </div>
           <div onClick={() => handleIconDeleteClick(competitor.id)} style={{ cursor: 'pointer', marginLeft: '5px' }}>
-            <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="35" height="35" />
+            <img src={`${process.env.PUBLIC_URL}/deleteIcon.png`} alt="Icon delete" width="100%" height="100%" />
           </div>
         </div>
       </div>
@@ -554,48 +554,48 @@ export default function MainPage1() {
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
 
-        <img src={`${process.env.PUBLIC_URL}/homeLogo.png`} alt="sunnyTeknolojiLogo" style={{ width: '25%', height: '15vh', position: 'fixed', top: '1%', left: '3%' }} />
+        <img src={`${process.env.PUBLIC_URL}/homeLogo.png`} alt="sunnyTeknolojiLogo" style={{ width: '15%', height: '13vh', position: 'fixed', top: '1%', left: '3%' }} />
 
        
         <div onClick={() => getReadyCode()} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/button_ready.png`} alt="ready" style={{ width: '5vw', height: '5vh', position: 'fixed', top: '4.8%', right: '37%'}} />
+          <img src={`${process.env.PUBLIC_URL}/button_ready.png`} alt="ready" style={{ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '32.5%'}} />
         </div>
 
         <div onClick={() => getStartCodeAndStartTimer()} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/button_start.png`} alt="start" style={{ width: '5vw', height: '5vh', position: 'fixed', top: '4.8%', right: '31%'}} />
+          <img src={`${process.env.PUBLIC_URL}/button_start.png`} alt="start" style={{ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '27.5%'}} />
         </div>
         
         <Button onClick={() => getStopCodeAndStopTimer()}  style={{  position: 'fixed', top: '5%', left: '35%'}}>Stop</Button>
-
+          <div style={{  position: 'fixed', top: '9%', left: '19%' ,color:"#ffff"}}> screenWidth : {screenWidth}  screenHeight : {screenHeight}</div>
 
         <div onClick={() => setShowLog(true)} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/button_log.png`} alt="log" style={{ width: '5vw', height: '4.5vh', position: 'fixed', top: '5%', right: '25.5%'}} />
+          <img src={`${process.env.PUBLIC_URL}/button_log.png`} alt="log" style={{ width: '4vw', height: '3.5vh', position: 'fixed', top: '5.3%', right: '22.5%'}} />
         </div>
         
         <div onClick={handleShowAddOpen} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '12%', height: '8vh', position: 'fixed', top: '3%', right: '13%' }} />
+          <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '10%', height: '8vh', position: 'fixed', top: '3%', right: '12%' }} />
         </div>
 
 
         <div onClick={() => logOutClick()} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/logout.png`} alt="logout" style={{ width: '7%', height: '7vh', position: 'fixed', top: '4%', right: '6%' }} />
+          <img src={`${process.env.PUBLIC_URL}/logout.png`} alt="logout" style={{ width: '6%', height: '7vh', position: 'fixed', top: '4%', right: '6%' }} />
         </div>
 
       </div>
 
 
-      <div style={{ width: "95%", height: "80%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "2.2%" }}>
+      <div style={{ width: "95%", height: "86%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "4%" }}>
 
         {/* tablo başlıkları  */}
-        <div style={{ width: "95%", height: "5%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "30px", fontFamily: 'New Times Roman' }}>
-          <div style={{ flex: "0.3" }}></div>
-          <div style={{ flex: "0.2" }}>ŞEHİR </div>
+        <div style={{ width: "95%", height: "3%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "125%", fontFamily: 'New Times Roman' }}>
+          <div style={{ flex: "0.1" }}></div>
+          <div style={{ flex: "0.4" }}>ŞEHİR </div>
           <div style={{ flex: "4" }}> YARIŞMACI </div>
           <div style={{ flex: "0.5" }}> SÜRE </div>
           <div style={{ flex: "0.5" }}> </div>
         </div>
 
-        <div style={{ width: "95%", height: "98%" }}>
+        <div style={{ width: "95%", height: "97%" }}>
           {/* tablonun gövdesi */}
           {sections}
 
@@ -603,9 +603,9 @@ export default function MainPage1() {
 
       </div>
 
-      <div onClick={() => nextPageClick()} style={{ cursor: 'pointer' }}>
+      {/* <div onClick={() => nextPageClick()} style={{ cursor: 'pointer' }}>
         <img src={`${process.env.PUBLIC_URL}/firstPage.png`} alt="first page" style={{ width: '6%', height: '7vh', position: 'fixed', bottom: '2%', right: '7%' }} />
-      </div>
+      </div> */}
 
       {/* YARIŞMACI EKLEME MODAL */}
 
