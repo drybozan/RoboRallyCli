@@ -368,7 +368,7 @@ export default function MainPage1() {
 
   const getReadyCode = () => {  
 
-    roboRallyServerService.updateReadyByCode()
+    roboRallyServerService.ready()
       .then((result) => {
         if (result.data.success === true) {
           console.log(result.data.message);
@@ -386,7 +386,7 @@ export default function MainPage1() {
 
   const getStartCodeAndStartTimer = () => {
 
-    roboRallyServerService.updateStartByCode()
+    roboRallyServerService.start()
       .then((result) => {
         if (result.data.success === true) {
           console.log(result.data.message);
@@ -400,26 +400,6 @@ export default function MainPage1() {
       });
   };
 
-  const getStopCodeAndStopTimer = () => {
-
-    //robota start sinyali gönderecek. robot aldığı sinyale karşılık kendi kodunu gönderecek.
-    const robotCodes = ["11", "22", "33", "44"];
-
-    roboRallyServerService.updateReadyAndStartByCode(robotCodes)
-      .then((result) => {
-        if (result.data.success === true) {
-          console.log(result.data.message);
-        } else {
-          console.log(result.data.message);
-          toast.warning(result.data.message);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-
-  };
 
 
   // console.log("competitors")
@@ -565,7 +545,7 @@ export default function MainPage1() {
           <img src={`${process.env.PUBLIC_URL}/button_start.png`} alt="start" style={{ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '27.5%'}} />
         </div>
         
-        <Button onClick={() => getStopCodeAndStopTimer()}  style={{  position: 'fixed', top: '5%', left: '35%'}}>Stop</Button>
+
           <div style={{  position: 'fixed', top: '9%', left: '19%' ,color:"#ffff"}}> screenWidth : {screenWidth}  screenHeight : {screenHeight}</div>
 
         <div onClick={() => setShowLog(true)} style={{ cursor: 'pointer' }}>

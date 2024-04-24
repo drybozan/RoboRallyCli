@@ -1,11 +1,12 @@
 import './App.css';
-import { Route, Routes,Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify'; // react-toastify'yi içe aktar
 import 'react-toastify/dist/ReactToastify.css'; // Stil dosyasını içe aktar
 import Login from './pages/Login'
 import MainPage1 from './pages/MainPage1';
 import MainPage2 from './pages/MainPage2';
+import ManuelPage from './pages/ManuelPage';
 
 function App() {
 
@@ -20,7 +21,7 @@ function App() {
       <Navigate to="/" replace={true} />
     );
   };
-  
+
 
   return (
     <div className="App">
@@ -30,7 +31,7 @@ function App() {
         {/* <Route exact path="/" element={<Login />} />
         <Route exact path="/main" element={<MainPage1 />} />
         <Route exact path="/main/page2" element={<MainPage2/>} /> */}
-       <Route
+        <Route
           path="/"
           element={<Login />}
         />
@@ -41,6 +42,10 @@ function App() {
         <Route
           path="/main/page2"
           element={<PrivateRoute element={<MainPage2 />} />}
+        />
+        <Route
+          path="/manuel"
+          element={<PrivateRoute element={<ManuelPage />} />}
         />
       </Routes>
 

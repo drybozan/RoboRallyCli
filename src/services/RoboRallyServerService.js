@@ -1,7 +1,7 @@
 import axios from "axios"
 
-//const ipAdress = "localhost"
-const ipAdress = "192.168.80.33"
+const ipAdress = "localhost"
+//const ipAdress = "192.168.80.33"
 const port = "8080"
 
 export default class RoboRallyServerService {
@@ -95,32 +95,32 @@ export default class RoboRallyServerService {
 
 
  
-    updateReadyByCode() {
+    ready(codes) {
 
         return axios({
             method: 'post',
             maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateReadyByCode`,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/ready?codes=${codes}`,
           
         })
     }
 
-    updateStartByCode() {
+    start(codes) {
 
         return axios({
             method: 'post',
             maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateStartByCode`,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/start?codes=${codes}`,
           
         })
     }
 
-    updateReadyAndStartByCode(codes) {
+    finish(codes) {
 
         return axios({
             method: 'post',
             maxBodyLength: Infinity,
-            url: `http://${ipAdress}:${port}/DefCompetitorsController/updateReadyAndStartByCode?codes=${codes}`,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/finish?codes=${codes}`,
           
         })
     }
