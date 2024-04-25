@@ -35,7 +35,7 @@ export default function ManuelPage() {
         fetchData();
 
         // Her saniyede bir çalıştırmak için interval
-        const intervalId = setInterval(fetchData, 10000);
+        const intervalId = setInterval(fetchData, 2000);
 
         // Component unmount edildiğinde interval'i temizle
         return () => clearInterval(intervalId);

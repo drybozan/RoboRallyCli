@@ -96,7 +96,7 @@ export default function MainPage1() {
     fetchData();
 
     // Her saniyede bir çalıştırmak için interval
-    const intervalId = setInterval(fetchData, 1000);
+    const intervalId = setInterval(fetchData, 50);
 
     // Component unmount edildiğinde interval'i temizle
     return () => clearInterval(intervalId);
