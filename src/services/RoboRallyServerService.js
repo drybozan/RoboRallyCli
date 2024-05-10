@@ -20,7 +20,7 @@ export default class RoboRallyServerService {
         })
     }
 
-    add(city,name,duration,eliminated) {
+    add(city,name,duration,eliminated,robotId) {
 
         return axios({
             method: 'post',
@@ -30,7 +30,8 @@ export default class RoboRallyServerService {
                 "city": city,
                 "name": name,               
                 "eliminated":eliminated,
-                "duration":duration
+                "duration":duration,
+                "code":robotId
 
             }
         })

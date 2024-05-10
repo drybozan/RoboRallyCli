@@ -31,6 +31,7 @@ export default function MainPage1() {
   const [city, setCity] = useState("");
   const [name, setName] = useState("");
   const [isEliminated, setEliminated] = useState(false);
+  const [robotId, setRobotId] = useState("");
 
 
   const [competitors, setCompetitors] = useState([]);
@@ -237,6 +238,9 @@ export default function MainPage1() {
     console.log("name")
     console.log(name)
 
+    console.log("robotId")
+    console.log(robotId)
+
     if (city === "") {
 
       toast.warning("Lütfen şehir bilgisini giriniz.");
@@ -245,8 +249,13 @@ export default function MainPage1() {
 
       toast.warning("Lütfen yarışmacı ismini giriniz.");
 
-    } else {
-      roboRallyServerService.add(city, name, "00:00:000", isEliminated).then(result => {
+    } else if (robotId === "") {
+
+      toast.warning("Lütfen yarışmacı robot kodunu giriniz.");
+
+    }else {
+
+      roboRallyServerService.add(city, name, "00:00:000", isEliminated,robotId).then(result => {
 
         if (result.data.success === true) {
           toast.success(result.data.message);
@@ -261,6 +270,7 @@ export default function MainPage1() {
         handleShowAddClose();
         setCity("")
         setName("")
+        setRobotId("")
 
       });
 
@@ -613,6 +623,11 @@ export default function MainPage1() {
               >
                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
                 <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
+
+                 <br/>
+
+                <Form.Label>ROBOT ID</Form.Label>
+                <Form.Control onChange={(e) => setRobotId(e.target.value)} value={robotId} />
               </Form.Group>
             </Form>
           </Modal.Body>
