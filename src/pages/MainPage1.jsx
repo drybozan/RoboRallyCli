@@ -40,6 +40,10 @@ export default function MainPage1() {
   const [logFileName, setLogFileName] = useState("");
   const [logData, setLogData] = useState([]);
 
+  const [readyImageSize, setReadyImageSize] = useState({ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '32.5%' });
+  const [startImageSize, setStartImageSize] = useState({ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '27.5%' });
+
+
 
   useEffect(() => {
     // Function to update screen dimensions on resize
@@ -253,9 +257,9 @@ export default function MainPage1() {
 
       toast.warning("Lütfen yarışmacı robot kodunu giriniz.");
 
-    }else {
+    } else {
 
-      roboRallyServerService.add(city, name, "00:00:000", isEliminated,robotId).then(result => {
+      roboRallyServerService.add(city, name, "00:00:000", isEliminated, robotId).then(result => {
 
         if (result.data.success === true) {
           toast.success(result.data.message);
@@ -300,14 +304,14 @@ export default function MainPage1() {
         .then(result => {
           // Gelen verinin içerisindeki "data" alanına eriş
           const rawData = result.data;
-        
+
           if (typeof rawData === "object") { // sadece tek satırlık log geldiğinde object olarak geliyor.
 
             const rawDataString = JSON.stringify(rawData); //string e dönüştür
 
             // Her bir satırı ayır
             const lines = rawDataString.trim().split('\n');
-            
+
             // Her bir satırı JSON nesnesine dönüştür
             const parsedData = lines.map(line => JSON.parse(line));
 
@@ -376,7 +380,20 @@ export default function MainPage1() {
   }
 
 
-  const getReadyCode = () => {  
+  const getReadyCode = () => {
+
+    // Tıklama yapıldığında resmin boyutunu değiştir
+    setReadyImageSize(prevSize => {
+      // Örnek olarak mevcut boyutun %50 büyüğünü ayarla
+      const newWidth = parseFloat(prevSize.width) * 1.2 + 'vw';
+      const newHeight = parseFloat(prevSize.height) * 1.2 + 'vh';
+      return { width: newWidth, height: newHeight, position: 'fixed', top: '4.9%', right: '32.5%' };
+    });
+
+    // Belirli bir süre sonra boyutları tekrar sıfırla
+    setTimeout(() => {
+      setReadyImageSize({ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '32.5%' });
+    }, 300); // Örnek olarak 0.3 saniye sonra boyutları sıfırlayabilir
 
     roboRallyServerService.ready()
       .then((result) => {
@@ -395,6 +412,19 @@ export default function MainPage1() {
 
 
   const getStartCodeAndStartTimer = () => {
+
+    // Tıklama yapıldığında resmin boyutunu değiştir
+    setStartImageSize(prevSize => {
+      // Örnek olarak mevcut boyutun %50 büyüğünü ayarla
+      const newWidth = parseFloat(prevSize.width) * 1.2 + 'vw';
+      const newHeight = parseFloat(prevSize.height) * 1.2 + 'vh';
+      return { width: newWidth, height: newHeight, position: 'fixed', top: '4.9%', right: '27.5%'};
+    });
+
+    // Belirli bir süre sonra boyutları tekrar sıfırla
+    setTimeout(() => {
+      setStartImageSize({ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '27.5%' });
+    }, 300); // Örnek olarak 0.3 saniye sonra boyutları sıfırlayabilir
 
     roboRallyServerService.start()
       .then((result) => {
@@ -478,7 +508,7 @@ export default function MainPage1() {
       marginBottom: "0.2%",
       border: competitor.ready ? "4px ridge white" : "2px solid white",  // "ready" true ise kırmızı, değilse beyaz kenarlık
       animation: competitor.ready ? "pulse 1s infinite" : "none",  // "ready" true ise animasyonu etkinleştir    
-      
+
 
     };
 
@@ -497,7 +527,7 @@ export default function MainPage1() {
 
             {index !== 0 && index !== 1 && index !== 2 && (
 
-              <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`}  width="100%" height="100%" style={{ alignSelf: 'flex-start', marginLeft: '-25px' }} />
+              <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="100%" height="100%" style={{ alignSelf: 'flex-start', marginLeft: '-25px' }} />
 
             )}
 
@@ -505,17 +535,16 @@ export default function MainPage1() {
         </div>
 
         {/* yarısmacı bilgileri*/}
-        <div style={{ marginLeft:"0.5%",flex: "0.7", fontWeight: 'bold', fontSize: "140%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman',display: 'flex', alignItems: 'start' }}>{competitor.city.toUpperCase()}</div>
-        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "140%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start'}}>{competitor.name.toUpperCase()}</div>
+        <div style={{ marginLeft: "0.5%", flex: "0.7", fontWeight: 'bold', fontSize: "140%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start' }}>{competitor.city.toUpperCase()}</div>
+        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "140%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start' }}>{competitor.name.toUpperCase()}</div>
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "150%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
           {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="20%" height="20%" /> : competitor.duration}
 
         </div>
 
-        <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center',width:"100%", height:"100%"  }}>
-          {/* <Button onClick={() => startTimer(competitor.id)} >Start</Button> */}
-          {/* <Button onClick={() => stopTimer(competitor.id)} >Stop</Button> */}
+        <div style={{ flex: "0.5", display: 'flex', flexDirection: 'row', justifyContent: 'center', width: "100%", height: "100%" }}>
+
           <div onClick={() => handleIconUpdateClick(competitor.id)} style={{ cursor: 'pointer', marginRight: '5px' }}>
             <img src={`${process.env.PUBLIC_URL}/updateIcon.png`} alt="Icon update" width="100%" height="100%" />
           </div>
@@ -534,7 +563,7 @@ export default function MainPage1() {
       width: screenWidth, height: screenHeight,
       backgroundImage: 'url(/homeBG3.png)',
       backgroundSize: '100% 100%', // Yatay boyutu otomatik, dikey boyutu %100 olacak şekilde ayarla
-      backgroundRepeat: 'no-repeat', // Arka plan resmini yalnızca bir kez göster
+      backgroundRepeat: 'no-repeat', // Arka plan resmini yalnızca bir kez göster  style={{ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '32.5%' }}
       backgroundPosition: 'center', // Resmi ekranda merkeze hizala
       display: 'flex',
       flexDirection: 'column',
@@ -546,22 +575,22 @@ export default function MainPage1() {
 
         <img src={`${process.env.PUBLIC_URL}/homeLogo.png`} alt="sunnyTeknolojiLogo" style={{ width: '15%', height: '13vh', position: 'fixed', top: '1%', left: '3%' }} />
 
-       
+
         <div onClick={() => getReadyCode()} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/button_ready.png`} alt="ready" style={{ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '32.5%'}} />
+          <img src={`${process.env.PUBLIC_URL}/button_ready.png`} alt="ready" style={{ ...readyImageSize }} />
         </div>
 
         <div onClick={() => getStartCodeAndStartTimer()} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/button_start.png`} alt="start" style={{ width: '4vw', height: '4vh', position: 'fixed', top: '4.9%', right: '27.5%'}} />
+          <img src={`${process.env.PUBLIC_URL}/button_start.png`} alt="start" style={{ ...startImageSize }} />
         </div>
-        
 
-          <div style={{  position: 'fixed', top: '9%', left: '19%' ,color:"#ffff"}}> screenWidth : {screenWidth}  screenHeight : {screenHeight}</div>
+
+        <div style={{ position: 'fixed', top: '9%', left: '19%', color: "#ffff" }}> screenWidth : {screenWidth}  screenHeight : {screenHeight}</div>
 
         <div onClick={() => setShowLog(true)} style={{ cursor: 'pointer' }}>
-          <img src={`${process.env.PUBLIC_URL}/button_log.png`} alt="log" style={{ width: '4vw', height: '3.5vh', position: 'fixed', top: '5.3%', right: '22.5%'}} />
+          <img src={`${process.env.PUBLIC_URL}/button_log.png`} alt="log" style={{ width: '4vw', height: '3.5vh', position: 'fixed', top: '5.3%', right: '22.5%' }} />
         </div>
-        
+
         <div onClick={handleShowAddOpen} style={{ cursor: 'pointer' }}>
           <img src={`${process.env.PUBLIC_URL}/addCompetitor.png`} alt="add competitor" style={{ width: '10%', height: '8vh', position: 'fixed', top: '3%', right: '12%' }} />
         </div>
@@ -624,7 +653,7 @@ export default function MainPage1() {
                 <Form.Label>YARIŞMACI İSMİ</Form.Label>
                 <Form.Control as="textarea" rows={2} onChange={(e) => setName(e.target.value)} value={name} />
 
-                 <br/>
+                <br />
 
                 <Form.Label>ROBOT ID</Form.Label>
                 <Form.Control onChange={(e) => setRobotId(e.target.value)} value={robotId} />
