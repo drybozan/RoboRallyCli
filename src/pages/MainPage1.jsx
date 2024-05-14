@@ -450,10 +450,10 @@ export default function MainPage1() {
   const getGradientColors = (index) => {
     // Define your gradient colors logic here
     const gradientColors = [
-      `linear-gradient(to left, rgba(255, 227, 0, 0.9), rgba(220, 50, 5, 0.9))`,
-      `linear-gradient(to left, rgba(255, 227, 0, 0.8), rgba(220, 50, 5, 0.8))`,
-      `linear-gradient(to left, rgba(255, 227, 0, 0.7), rgba(220, 50, 5, 0.7))`,
-      `linear-gradient(to left, rgba(255, 227, 0, 0.6), rgba(241, 108, 5, 0.6))`,
+      `linear-gradient(to left, rgba(240, 160, 0, 0.9), rgba(150, 50, 5, 0.8))`,
+      `linear-gradient(to left, rgba(240, 160, 0, 0.8), rgba(150, 50, 5, 0.8))`,
+      `linear-gradient(to left, rgba(240, 160, 0, 0.7), rgba(150, 50, 5, 0.8))`,
+      `linear-gradient(to left, rgba(240, 160, 0, 0.6), rgba(241, 108, 5, 0.6))`,
     ];
     return gradientColors[index] || gradientColors[gradientColors.length - 1];
   };
@@ -536,10 +536,10 @@ export default function MainPage1() {
 
         {/* yarısmacı bilgileri*/}
         <div style={{ marginLeft: "0.5%", flex: "0.7", fontWeight: 'bold', fontSize: "230%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start' }}>{competitor.city.toUpperCase()}</div>
-        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "260%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start' }}>{competitor.name.toUpperCase()}</div>
+        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "250%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start'}}>{competitor.name.toUpperCase()}</div>
         <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "260%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
-          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="35%" height="50%" /> : competitor.duration}
+          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="36%" height="40%" /> : competitor.duration}
 
         </div>
 
@@ -573,7 +573,7 @@ export default function MainPage1() {
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
 
-        <img src={`${process.env.PUBLIC_URL}/homeLogo.png`} alt="sunnyTeknolojiLogo" style={{ width: '15%', height: '13vh', position: 'fixed', top: '1%', left: '3%' }} />
+        <img src={`${process.env.PUBLIC_URL}/homeLogo.png`} alt="sunnyTeknolojiLogo" style={{ width: '16%', height: '13vh', position: 'fixed', top: '0.5%', left: '4%' }} />
 
 
         <div onClick={() => getReadyCode()} style={{ cursor: 'pointer' }}>
