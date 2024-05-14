@@ -450,10 +450,10 @@ export default function MainPage1() {
   const getGradientColors = (index) => {
     // Define your gradient colors logic here
     const gradientColors = [
+      `linear-gradient(to left, rgba(255, 227, 0, 0.9), rgba(220, 50, 5, 0.9))`,
       `linear-gradient(to left, rgba(255, 227, 0, 0.8), rgba(220, 50, 5, 0.8))`,
-      `linear-gradient(to left, rgba(255, 227, 0, 0.6), rgba(220, 50, 5, 0.7))`,
-      `linear-gradient(to left, rgba(255, 227, 0, 0.5), rgba(220, 50, 5, 0.6))`,
-      `linear-gradient(to left, rgba(255, 227, 0, 0.2), rgba(241, 108, 5, 0.3))`,
+      `linear-gradient(to left, rgba(255, 227, 0, 0.7), rgba(220, 50, 5, 0.7))`,
+      `linear-gradient(to left, rgba(255, 227, 0, 0.6), rgba(241, 108, 5, 0.6))`,
     ];
     return gradientColors[index] || gradientColors[gradientColors.length - 1];
   };
@@ -500,7 +500,7 @@ export default function MainPage1() {
     // Yarışmacının listelendiği yatay cizgi still
     const divStyle = {
       width: "100%",
-      height: "4.2%",
+      height: "4.5%",
       borderRadius: "50px",
       backgroundImage: competitor.ready ? gradientColorsReady : competitor.start ? gradientColorsStart : gradientColors,
       display: 'flex',
@@ -519,15 +519,15 @@ export default function MainPage1() {
         {/* sıralama kısmı */}
         <div style={{ flex: "0.1" }}>
           {/* sıralamanın yazıldığı yuvarlaklar*/}
-          <div style={{ width: "180%", height: "120%", borderRadius: "50%" }}>
+          <div style={{ width: "200%", height: "200%", borderRadius: "50%" }}>
 
             {index < 3 && (
-              <img src={`${process.env.PUBLIC_URL}/${medalIcon}`} alt={`Icon ${index + 1}`} width="95%" height="100%" style={{ alignSelf: 'flex-start', marginLeft: '-25px' }} />
+              <img src={`${process.env.PUBLIC_URL}/${medalIcon}`} alt={`Icon ${index + 1}`} width="120%" height="120%" style={{ alignSelf: 'flex-start', marginLeft: '-40px' }} />
             )}
 
             {index !== 0 && index !== 1 && index !== 2 && (
 
-              <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="100%" height="100%" style={{ alignSelf: 'flex-start', marginLeft: '-25px' }} />
+              <img src={`${process.env.PUBLIC_URL}/${index + 1}.png`} alt={`Icon ${index}`} width="120%" height="120%" style={{ alignSelf: 'flex-start', marginLeft: '-35px' }} />
 
             )}
 
@@ -535,11 +535,11 @@ export default function MainPage1() {
         </div>
 
         {/* yarısmacı bilgileri*/}
-        <div style={{ marginLeft: "0.5%", flex: "0.7", fontWeight: 'bold', fontSize: "140%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start' }}>{competitor.city.toUpperCase()}</div>
-        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "140%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start' }}>{competitor.name.toUpperCase()}</div>
-        <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "150%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
+        <div style={{ marginLeft: "0.5%", flex: "0.7", fontWeight: 'bold', fontSize: "230%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start' }}>{competitor.city.toUpperCase()}</div>
+        <div style={{ flex: "4", fontWeight: 'bold', fontSize: "260%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman', display: 'flex', alignItems: 'start' }}>{competitor.name.toUpperCase()}</div>
+        <div style={{ flex: "0.5", fontWeight: 'bold', fontSize: "260%", color: "white", fontStyle: 'italic', fontFamily: 'New Times Roman' }}>
 
-          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="20%" height="20%" /> : competitor.duration}
+          {competitor.eliminated ? <img src={`${process.env.PUBLIC_URL}/eliminated.png`} alt="Icon" width="35%" height="50%" /> : competitor.duration}
 
         </div>
 
@@ -585,7 +585,7 @@ export default function MainPage1() {
         </div>
 
 
-        <div style={{ position: 'fixed', top: '9%', left: '19%', color: "#ffff" }}> screenWidth : {screenWidth}  screenHeight : {screenHeight}</div>
+        {/* <div style={{ position: 'fixed', top: '9%', left: '19%', color: "#ffff" }}> screenWidth : {screenWidth}  screenHeight : {screenHeight}</div> */}
 
         <div onClick={() => setShowLog(true)} style={{ cursor: 'pointer' }}>
           <img src={`${process.env.PUBLIC_URL}/button_log.png`} alt="log" style={{ width: '4vw', height: '3.5vh', position: 'fixed', top: '5.3%', right: '22.5%' }} />
@@ -603,18 +603,18 @@ export default function MainPage1() {
       </div>
 
 
-      <div style={{ width: "95%", height: "86%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "4%" }}>
+      <div style={{ width: "95%", height: "88%", display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', marginTop: "6%" }}>
 
         {/* tablo başlıkları  */}
-        <div style={{ width: "95%", height: "3%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "125%", fontFamily: 'New Times Roman' }}>
+        {/* <div style={{ width: "95%", height: "3%", display: 'flex', alignItems: 'center', marginBottom: "0.5%", color: '#fff', fontWeight: 'bold', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.8)', fontSize: "125%", fontFamily: 'New Times Roman' }}>
           <div style={{ flex: "0.1" }}></div>
           <div style={{ flex: "0.4" }}>ŞEHİR </div>
           <div style={{ flex: "4" }}> YARIŞMACI </div>
           <div style={{ flex: "0.5" }}> SÜRE </div>
           <div style={{ flex: "0.5" }}> </div>
-        </div>
+        </div> */}
 
-        <div style={{ width: "95%", height: "97%" }}>
+        <div style={{ width: "95%", height: "100%" }}>
           {/* tablonun gövdesi */}
           {sections}
 
