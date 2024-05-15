@@ -144,4 +144,13 @@ export default class RoboRallyServerService {
         })
     }
 
+    listenFinish() {
+        return axios({
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `http://${ipAdress}:${port}/DefCompetitorsController/listenFinish`,
+          
+        })
+    }
+
 }

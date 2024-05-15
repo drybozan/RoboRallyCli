@@ -35,14 +35,19 @@ function App() {
           path="/"
           element={<Login />}
         />
+
         <Route
           path="/main"
-          element={<PrivateRoute element={<MainPage1 />} />}
-        />
-        <Route
-          path="/main/page2"
           element={<PrivateRoute element={<MainPage2 />} />}
         />
+        {/* <Route
+          path="/main"
+          element={<PrivateRoute element={<MainPage1 />} />}
+        /> */}
+        {/* <Route
+          path="/main/page2"
+          element={<PrivateRoute element={<MainPage2 />} />}
+        /> */}
         <Route
           path="/manuel"
           element={<PrivateRoute element={<ManuelPage />} />}
