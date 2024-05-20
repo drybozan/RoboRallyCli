@@ -224,7 +224,7 @@ export default function MainPage1() {
         roboRallyServerService.deleteById(id).then(result => {
 
             if (result.data.success === true) {
-                toast.success(result.data.message);
+                console.log(result.data.message);
             } else {
                 toast.error(result.data.message);
 
